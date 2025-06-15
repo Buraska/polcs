@@ -1,0 +1,15 @@
+﻿
+
+
+Update === 
+-Equipment can be done with layer masks
+-маус ап в мэссэдж систем кажется не тем чем должно быть
+-Saymessage in messageSys has bad code.
+-звезды сделать через материал?
+
+
+Problems === 
+
+
+Thoughts === 
+как работает шэйдер для теней?
