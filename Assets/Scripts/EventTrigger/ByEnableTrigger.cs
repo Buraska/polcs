@@ -5,7 +5,7 @@ using UnityEngine;
 
 namespace EventTrigger
 {
-    public class ByEnableET : BaseET
+    public class ByEnableTrigger : Trigger
     {
 
         private void OnEnable()
@@ -15,8 +15,8 @@ namespace EventTrigger
         
         public IEnumerator RunWhenGameNotBusy()
         {
-            yield return new WaitUntil(() => !GameManager.Instance.GameIsBusy);
-            GameManager.Instance.StartCoroutine(GameManager.Instance.RunEvents(gameEvents));
+            yield return new WaitUntil(() => !GameManager.Instance.UIBlocker.IsBlocked);
+            GameManager.Instance.StartCoroutine(GameManager.Instance.EventManager.RunEvents(gameEvents));
         }
     }
 }

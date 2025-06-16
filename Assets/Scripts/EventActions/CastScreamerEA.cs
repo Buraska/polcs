@@ -3,7 +3,8 @@ using UnityEngine;
 
 namespace EventActions
 {
-    public class CastScreamerEA: BaseEA
+    [CreateAssetMenu(fileName = "CastScreamerEA", menuName = "CastScreamerEA")]
+    public class CastScreamerEA: EventAction
     {
         [SerializeField] private Animator animator;
         [SerializeField] private int waitBeforeStart;
@@ -27,7 +28,7 @@ namespace EventActions
                     yield return null;
                 }
                 
-                MessageSystem.Instance.StopSpeaking();
+                GameManager.Instance.MessageManager.HideInstant();
             }
             
             animator.SetTrigger(TrScreamer);

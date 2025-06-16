@@ -7,36 +7,35 @@ using UnityEngine.Events;
 
 namespace GameEvent
 {
-    public class BaseGE : MonoBehaviour
+    
+    [CreateAssetMenu(fileName = "Game event", menuName = "Game event")]
+    public class GameEvent : MonoBehaviour
     {
-        [SerializeField] protected BaseGE[] requiredEvents;
+        [SerializeField] protected GameEvent[] requiredEvents;
         
-        [SerializeField] protected  BaseGE[] forbiddenEvents;
+        [SerializeField] protected  GameEvent[] forbiddenEvents;
 
-        [SerializeField] protected BaseEA[] actions;
+        [SerializeField] protected EventAction[] actions;
+        
+        public string EventName => name;
 
-        public BaseEA[] GetActions()
+        public EventAction[] GetActions()
         {
             return actions;
         }
-
-        public string GetName()
-        {
-            return gameObject.name;
-        }
+        
         public bool IsActive()
         {
-
             if (!IsActiveCustom())
             {
                 return false;
             }
-            if (requiredEvents.Length != 0 && !GameManager.Instance.EventsExist(requiredEvents))
+            if (requiredEvents.Length != 0 && !GameManager.Instance.EventManager.EventsExist(requiredEvents))
             {
                 return false;
             }
 
-            if (forbiddenEvents.Length != 0 && GameManager.Instance.EventsExist(forbiddenEvents))
+            if (forbiddenEvents.Length != 0 && GameManager.Instance.EventManager.EventsExist(forbiddenEvents))
             {
                 return false;
             }
@@ -52,8 +51,6 @@ namespace GameEvent
 
         public IEnumerator Act()
         {
-  
-
             foreach (var action in actions)
             {
                 yield return GameManager.Instance.StartCoroutine(action.ActionCoroutine());

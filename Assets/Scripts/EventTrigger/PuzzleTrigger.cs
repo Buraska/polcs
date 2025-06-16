@@ -7,7 +7,7 @@ using UnityEngine;
 
 namespace EventTrigger
 {
-    public class PuzzleET: BaseET
+    public class PuzzleTrigger: Trigger
     {
         [SerializeField] private BasePuzzleElement[] puzzleElements;
         [SerializeField] private int waitWhenSolved = 3;
@@ -31,7 +31,7 @@ namespace EventTrigger
                 {
                     continue;
                 }
-                GameManager.Instance.StartCoroutine(GameManager.Instance.RunEvents(gameEvents));
+                GameManager.Instance.StartCoroutine(GameManager.Instance.EventManager.RunEvents(gameEvents));
                 yield break;
             }
 

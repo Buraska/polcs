@@ -1,16 +1,18 @@
 ﻿using System.Collections;
+using SceneSystem;
 using UnityEngine;
 
 namespace EventActions
 {
-    public class GoToSceneEA : BaseEA
+    [CreateAssetMenu(fileName = "GoToSceneEA", menuName = "GoToSceneEA")]
+    public class GoToSceneEA : EventAction
     {
 
         [SerializeField] private int sceneNum;
 
         public override IEnumerator ActionCoroutine()
         {
-            yield return GameManager.Instance.StartCoroutine(SceneManager.Instance.GoToSceneCoroutine(sceneNum));
+            yield return GameManager.Instance.StartCoroutine(GameManager.Instance.SceneTransitionManager.TransitionToSceneCoroutine(sceneNum));
 
         }
     }

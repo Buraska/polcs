@@ -1,17 +1,19 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using SceneSystem;
 using UnityEngine;
 
 namespace EventActions
 {
-    public class DisableObjectEA : BaseEA
+    [CreateAssetMenu(fileName = "DisableObjectEA", menuName = "DisableObjectEA")]
+    public class DisableObjectEA : EventAction
     {
         [SerializeField] private GameObject objectToDisable;
         [SerializeField] private int fadeSpeed = 8;
 
         public override IEnumerator ActionCoroutine()
         {
-            yield return GameManager.Instance.StartCoroutine(SceneManager.Instance.DisableObjectCoroutine(objectToDisable, fadeSpeed));
+            yield return GameManager.Instance.StartCoroutine(GameManager.Instance.SceneTransitionManager.DisableObjectCoroutine(objectToDisable, fadeSpeed));
         }
     }
 }

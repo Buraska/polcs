@@ -5,9 +5,9 @@ using UnityEngine;
 
 namespace EventTrigger
 {
-    public class BaseET : MonoBehaviour
+    public class Trigger : MonoBehaviour
     {
-        [SerializeField] protected BaseGE[] gameEvents;
+        [SerializeField] protected GameEvent.GameEvent[] gameEvents;
         
     }
 }

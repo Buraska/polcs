@@ -1,15 +1,17 @@
 ﻿using System.Collections;
+using Inventory;
 using UnityEngine;
 
 namespace EventActions
 {
-    public class TakeItemEA : BaseEA
+    [CreateAssetMenu(fileName = "Event action: TakeItemEA", menuName = "Event action: TakeItemEA")]
+    public class TakeItemEA : EventAction
     {
 
         [SerializeField] private ItemModel item;
         public override IEnumerator ActionCoroutine()
         {
-            InventoryManager.Instance.Add(item);
+            GameManager.Instance.InventoryManager.Add(item);
             yield break;
         }
     }

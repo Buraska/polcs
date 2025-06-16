@@ -3,13 +3,14 @@ using UnityEngine;
 
 namespace EventActions
 {
-    public class WaitForClickEA: BaseEA
+    [CreateAssetMenu(fileName = "WaitForClickEA", menuName = "WaitForClickEA")]
+    public class WaitForClickEA: EventAction
     {
         public override IEnumerator ActionCoroutine()
         {
-            GameManager.Instance.BlockInterface();
+            GameManager.Instance.UIBlocker.Block();
             yield return new WaitUntil(() => Input.GetKeyUp(KeyCode.Mouse0));
-            GameManager.Instance.UnblockInterface();
+            GameManager.Instance.UIBlocker.Unblock();
         }
     }
 }

@@ -4,11 +4,12 @@ using UnityEngine;
 using UnityEngine.UI;
 
 
-    public class Animation
+    public class CustomAnimation
     {
             public static IEnumerator FadeImage(Image img, bool fadeIn, int coef = 8)
         
             {
+                Debug.Log(img.isActiveAndEnabled);
                 // fade from opaque to transparent
                 var col = img.color;
         

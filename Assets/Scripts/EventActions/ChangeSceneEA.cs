@@ -1,16 +1,18 @@
 ﻿using System.Collections;
+using SceneSystem;
 using UnityEngine;
 
 namespace EventActions
 {
-    public class ChangeSceneEA: BaseEA
+    [CreateAssetMenu(fileName = "ChangeSceneEA", menuName = "ChangeSceneEA")]
+    public class ChangeSceneEA: EventAction
     {
         [SerializeField] private int changeSceneNum;
-        [SerializeField] private SceneController newScene;
+        [SerializeField] private Scene newScene;
         
         public override IEnumerator ActionCoroutine()
         {
-            SceneManager.Instance.ChangeSceneTo(changeSceneNum, newScene);
+            GameManager.Instance.SceneTransitionManager.ChangeSceneTo(changeSceneNum, newScene);
             yield break;
         }
     }
