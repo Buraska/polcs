@@ -13,7 +13,7 @@ namespace EventActions
 
         public override IEnumerator ActionCoroutine()
         {
-            yield return GameManager.Instance.StartCoroutine(GameManager.Instance.SceneTransitionManager.DisableObjectCoroutine(objectToDisable, fadeSpeed));
+            yield return (GameManager.Instance.SceneTransitionManager.DisableObjectCoroutine(objectToDisable, fadeSpeed));
         }
     }
 }

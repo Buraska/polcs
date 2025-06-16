@@ -10,7 +10,7 @@ namespace EventActions
         [SerializeField] private string[] messages;
         public override IEnumerator ActionCoroutine()
         {
-            yield return GameManager.Instance.StartCoroutine(GameManager.Instance.MessageManager.ShowMessages(messages));
+            yield return (GameManager.Instance.MessageManager.ShowMessages(messages));
         }
     }
 }

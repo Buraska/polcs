@@ -41,10 +41,9 @@ public class GameManager : MonoBehaviour
         UIBlocker = GetComponent<UIBlocker>();
         EventManager = GetComponent<EventManager>();
         MessageManager = GetComponent<MessageManager>();
-        MessageManager.Init(UIBlocker);
         InventoryManager = GetComponent<InventoryManager>();
         SceneTransitionManager = GetComponent<SceneTransitionManager>();
-        SceneTransitionManager.Init(UIBlocker);
+        
     }
 }
 

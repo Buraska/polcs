@@ -12,7 +12,7 @@ namespace EventActions
         
         public override IEnumerator ActionCoroutine()
         {
-            GameManager.Instance.SceneTransitionManager.ChangeSceneTo(changeSceneNum, newScene);
+            yield return (GameManager.Instance.SceneTransitionManager.ChangeSceneToCoroutine(changeSceneNum, newScene));
             yield break;
         }
     }

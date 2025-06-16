@@ -12,7 +12,7 @@ namespace EventActions
         [SerializeField] private int fadeSpeed = 8;
         public override IEnumerator ActionCoroutine()
         {
-            yield return GameManager.Instance.StartCoroutine(GameManager.Instance.SceneTransitionManager.EnableObjectCoroutine(objectToDestroy, fadeSpeed));
+            yield return (GameManager.Instance.SceneTransitionManager.EnableObjectCoroutine(objectToDestroy, fadeSpeed));
         }
     }
 }

@@ -12,7 +12,7 @@ namespace EventActions
 
         public override IEnumerator ActionCoroutine()
         {
-            yield return GameManager.Instance.StartCoroutine(GameManager.Instance.SceneTransitionManager.TransitionToSceneCoroutine(sceneNum));
+            yield return (GameManager.Instance.SceneTransitionManager.TransitionToSceneCoroutine(sceneNum));
 
         }
     }

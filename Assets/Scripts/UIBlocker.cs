@@ -10,12 +10,15 @@ public class UIBlocker : MonoBehaviour
 
     public void Block()
     {
+        Debug.Log("Block");
         IsBlocked = true;
         uiBlock.enabled = IsBlocked;
     }
 
     public void Unblock()
     {
+        Debug.Log("Unblocklock");
+
         IsBlocked = false;
         uiBlock.enabled = IsBlocked;
     }

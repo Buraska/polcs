@@ -7,12 +7,6 @@ namespace MessageSystem
     {
         [SerializeField] private MessageUI ui;
 
-        private UIBlocker blocker;
-
-        public void Init(UIBlocker blocker)
-        {
-            this.blocker = blocker;
-        }
 
         public IEnumerator ShowMessages(string[] messages)
         {
