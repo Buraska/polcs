@@ -3,7 +3,6 @@ using UnityEngine;
 
 namespace EventActions
 {
-    [CreateAssetMenu(fileName = "Event action: Say message", menuName = "Event action: Say message")]
     public class SayMessageEA : EventAction
     {
 

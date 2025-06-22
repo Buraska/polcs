@@ -4,7 +4,6 @@ using UnityEngine;
 
 namespace EventActions
 {
-    [CreateAssetMenu(fileName = "GoToSceneEA", menuName = "GoToSceneEA")]
     public class GoToSceneEA : EventAction
     {
 

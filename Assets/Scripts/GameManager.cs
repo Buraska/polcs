@@ -5,6 +5,7 @@ using System.Linq;
 using EventTrigger;
 using GameEvent;
 using Inventory;
+using JetBrains.Annotations;
 using MessageSystem;
 using SceneSystem;
 using TMPro;
@@ -26,7 +27,7 @@ public class GameManager : MonoBehaviour
     public EventManager EventManager { get; private set; }
     public SceneTransitionManager SceneTransitionManager { get; private set; }
     
-    public InventoryManager InventoryManager { get; private set; }
+    [CanBeNull] public InventoryManager InventoryManager { get; private set; }
     
     public MessageManager MessageManager { get; private set; }
     

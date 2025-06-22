@@ -1,4 +1,5 @@
-﻿using TMPro;
+﻿using System.Collections;
+using TMPro;
 using UnityEngine;
 
 namespace MessageSystem
@@ -7,14 +8,23 @@ namespace MessageSystem
     {
         [SerializeField] private GameObject speechPanel;
         [SerializeField] private TextMeshProUGUI speechText;
+        [SerializeField] private int fadeSpeed = 16;
 
-        public void Show(string message)
+
+        public IEnumerator ShowMessage(string message)
         {
+            speechText.text = message.Replace("\\n", "\n");
             speechPanel.SetActive(true);
-            speechText.text = message;
+            yield return (CustomAnimation.Fade(speechText, false, fadeSpeed));
+        }
+        
+        public IEnumerator HideMessage()
+        {
+            yield return CustomAnimation.Fade(speechText, true, fadeSpeed);
+            speechText.text = "Nothing";
         }
 
-        public void Hide()
+        public void HidePanel()
         {
             speechPanel.SetActive(false);
         }

@@ -3,7 +3,6 @@ using UnityEngine;
 
 namespace EventActions
 {
-    [CreateAssetMenu(fileName = "CastScreamerEA", menuName = "CastScreamerEA")]
     public class CastScreamerEA: EventAction
     {
         [SerializeField] private Animator animator;

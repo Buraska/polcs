@@ -4,7 +4,6 @@ using UnityEngine;
 
 namespace EventActions
 {
-    [CreateAssetMenu(fileName = "ChangeSceneEA", menuName = "ChangeSceneEA")]
     public class ChangeSceneEA: EventAction
     {
         [SerializeField] private int changeSceneNum;

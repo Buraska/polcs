@@ -5,7 +5,6 @@ using UnityEngine;
 
 namespace EventActions
 {
-    [CreateAssetMenu(fileName = "EnableObjectEA", menuName = "EnableObjectEA")]
     public class EnableObjectEA : EventAction
     {
         [SerializeField] private GameObject objectToDestroy;

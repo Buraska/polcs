@@ -11,6 +11,7 @@ public class Scene : MonoBehaviour
     public void SetActive(bool value)
     {
         gameObject.SetActive(value);
-        GameManager.Instance.InventoryManager.SetActive(showInventory);
+        if (GameManager.Instance.InventoryManager != null)
+            GameManager.Instance.InventoryManager.SetActive(showInventory);
     }
 }

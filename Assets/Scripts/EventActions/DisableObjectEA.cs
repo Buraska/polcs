@@ -5,7 +5,6 @@ using UnityEngine;
 
 namespace EventActions
 {
-    [CreateAssetMenu(fileName = "DisableObjectEA", menuName = "DisableObjectEA")]
     public class DisableObjectEA : EventAction
     {
         [SerializeField] private GameObject objectToDisable;
