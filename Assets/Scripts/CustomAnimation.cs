@@ -81,7 +81,6 @@ using UnityEngine.UI;
                 {
                     for (float i = 0; i <= 1; i += Time.deltaTime * coef)
                     {
-                        Debug.Log(i);
                         col.a = i;
                         obj.color = col;
                         yield return null;

@@ -9,7 +9,7 @@ namespace EventTrigger
 {
     public class PuzzleTrigger: Trigger
     {
-        [SerializeField] private BasePuzzleElement[] puzzleElements;
+        [SerializeField] private BasePuzzleElement[] _puzzleElements;
         [SerializeField] private int waitWhenSolved = 3;
 
 
@@ -40,7 +40,7 @@ namespace EventTrigger
 
         private bool ArePuzzlesSolved()
         {
-            return puzzleElements.All(puzzle => puzzle.IsSolved());
+            return _puzzleElements.All(puzzle => puzzle.IsSolved());
         }
     }
 }

@@ -7,18 +7,16 @@ namespace Puzzles.CardDesk
 {
     public class CardController : MonoBehaviour
     {
-        [SerializeField] private Card[] _cards;
-        [SerializeField] private Sprite[] _cardsFaces;
-        [SerializeField] private SayMessageEA[] _sayMessageActions;
+        [SerializeField] private CardAndEvent[] _cards;
         private int cardsTurned = 0;
         
         private void Update()
         {
             foreach (var card in _cards)
             {
-                if (card.IsClicked && !card.isTurned)
+                if (card.Card.IsClicked && !card.Card.isTurned)
                 {
-                    StartCoroutine(_openCard(card));
+                    StartCoroutine(_openCard(card.Card));
                 }
             }
         }
@@ -27,9 +25,17 @@ namespace Puzzles.CardDesk
         {
             //TODO BLOCK UI
             card.isTurned = true;
-            yield return (card.openCard(_cardsFaces[cardsTurned]));
-            yield return _sayMessageActions[cardsTurned].ActionCoroutine();
+            yield return (card.openCard(_cards[cardsTurned].CardFace));
+            yield return GameManager.Instance.EventManager.RunEvents(new []{_cards[cardsTurned].GameEvent});
             cardsTurned++;
         }
+    }
+
+    [System.Serializable]
+    public class CardAndEvent
+    {
+        public Card Card;
+        public Sprite CardFace;
+        public GameEvent.GameEvent GameEvent;
     }
 }

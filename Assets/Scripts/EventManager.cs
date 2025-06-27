@@ -47,4 +47,5 @@ public class EventManager : MonoBehaviour
         _events.AddRange(ranEvents);
         GameManager.Instance.UIBlocker.Unblock();
     }
+    
 }
