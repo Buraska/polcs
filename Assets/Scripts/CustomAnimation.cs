@@ -38,14 +38,23 @@ using UnityEngine.UI;
             }
         
             public static IEnumerator FadeImage(SpriteRenderer img, bool fadeIn, int coef = 8)
-        
+                // Coef 0 - fades immediately
             {
                 var col = img.color;
-        
+
+                
                 if (fadeIn)
                 {
+                    if (coef == 0)
+                    {
+                        col.a = 0;
+                        img.color = col;
+                        yield break;
+                    }
+                    
                     for (float i = 1; i >= 0; i -= Time.deltaTime * coef)
                     {
+ 
                         col.a = i;
                         img.color = col;
                         yield return null;
@@ -53,8 +62,15 @@ using UnityEngine.UI;
                 }
                 else
                 {
+                    if (coef == 0)
+                    {
+                        col.a = 1;
+                        img.color = col;
+                        yield break;
+                    }
                     for (float i = 0; i <= 1; i += Time.deltaTime * coef)
                     {
+
                         col.a = i;
                         img.color = col;
                         yield return null;

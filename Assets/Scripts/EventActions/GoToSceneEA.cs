@@ -8,10 +8,11 @@ namespace EventActions
     {
 
         [SerializeField] private int sceneNum;
+        [SerializeField] private int fadeSpeed = 8;
 
         public override IEnumerator ActionCoroutine()
         {
-            yield return (GameManager.Instance.SceneTransitionManager.TransitionToSceneCoroutine(sceneNum));
+            yield return (GameManager.Instance.SceneTransitionManager.TransitionToSceneCoroutine(sceneNum, fadeSpeed));
 
         }
     }

@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using UnityEngine;
 using UnityEngine.Serialization;
 using UnityEngine.UI;
@@ -31,23 +32,39 @@ namespace SceneSystem
         }
     
 
-        public IEnumerator TransitionToSceneCoroutine(int sceneNum)
+        public IEnumerator TransitionToSceneCoroutine(int sceneNum, int speed = 8)
         {
-            yield return (CustomAnimation.FadeImage(sceneBlocker, false));
+            yield return (CustomAnimation.FadeImage(sceneBlocker, false, speed));
         
             localScenes[currentSceneNumber].SetActive(false);
             localScenes[sceneNum].SetActive(true);
             currentSceneNumber = sceneNum;
 
-            yield return (CustomAnimation.FadeImage(sceneBlocker, true));
+            yield return (CustomAnimation.FadeImage(sceneBlocker, true, speed));
         }
         
-        public IEnumerator ChangeSceneToCoroutine(int sceneNum, Scene newScene)
+        public IEnumerator TransitionToSceneCoroutine(Scene scene)
         {
-            if (sceneNum == currentSceneNumber)
+            yield return (CustomAnimation.FadeImage(sceneBlocker, false));
+            var newSceneInd = Array.IndexOf(localScenes, scene);
+            localScenes[currentSceneNumber].SetActive(false);
+            localScenes[newSceneInd].SetActive(true);
+            currentSceneNumber = newSceneInd;
+
+            yield return (CustomAnimation.FadeImage(sceneBlocker, true));
+        }
+        public IEnumerator ChangeSceneToCoroutine(Scene oldScene, Scene newScene)
+        {
+            var oldSceneInd = Array.IndexOf(localScenes, oldScene);
+            Debug.Log($"Change scene error. Old scene index {oldSceneInd}");
+
+            if (oldSceneInd == -1)
             {
-                var oldScene = localScenes[sceneNum];
-                localScenes[sceneNum] = newScene;
+                Debug.Log($"Change scene error. Old scene index {oldSceneInd}");
+            }
+            if (oldSceneInd == currentSceneNumber)
+            {
+                localScenes[oldSceneInd] = newScene;
                 
                 yield return (CustomAnimation.FadeImage(sceneBlocker, false));
                 oldScene.SetActive(false);
@@ -55,7 +72,7 @@ namespace SceneSystem
 
                 yield return (CustomAnimation.FadeImage(sceneBlocker, true));
             }
-            else localScenes[sceneNum] = newScene;
+            else localScenes[oldSceneInd] = newScene;
         }
     }
 }

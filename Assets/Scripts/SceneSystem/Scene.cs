@@ -14,4 +14,5 @@ public class Scene : MonoBehaviour
         if (GameManager.Instance.InventoryManager != null)
             GameManager.Instance.InventoryManager.SetActive(showInventory);
     }
+    
 }

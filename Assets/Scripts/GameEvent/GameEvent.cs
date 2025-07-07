@@ -11,11 +11,11 @@ namespace GameEvent
     [CreateAssetMenu(fileName = "Game event", menuName = "Game event")]
     public class GameEvent : MonoBehaviour
     {
-        [SerializeField] protected GameEvent[] requiredEvents;
+        [SerializeField] public GameEvent[] requiredEvents;
         
-        [SerializeField] protected  GameEvent[] forbiddenEvents;
+        [SerializeField] public  GameEvent[] forbiddenEvents;
 
-        [SerializeField] protected EventAction[] actions;
+        [SerializeField] public EventAction[] actions;
         
         public string EventName => name;
 
@@ -24,26 +24,8 @@ namespace GameEvent
             return actions;
         }
         
-        public bool IsActive()
-        {
-            if (!IsActiveCustom())
-            {
-                return false;
-            }
-            if (requiredEvents.Length != 0 && !GameManager.Instance.EventManager.EventsExist(requiredEvents))
-            {
-                return false;
-            }
 
-            if (forbiddenEvents.Length != 0 && GameManager.Instance.EventManager.EventsExist(forbiddenEvents))
-            {
-                return false;
-            }
-
-            return true;
-        }
-
-        protected virtual bool IsActiveCustom()
+        public virtual bool CanBeRunCustom()
         {
             return true;
         }

@@ -623,7 +623,7 @@
         <xs:attribute default="" name="binding-path" type="xs:string" use="optional" />
         <xs:attribute default="" name="label" type="xs:string" use="optional" />
         <xs:attribute default="true" name="allow-scene-objects" type="xs:boolean" use="optional" />
-        <xs:attribute default="null" name="type" type="xs:string" use="optional" />
+        <xs:attribute default="UnityEngine.Object" name="type" type="xs:string" use="optional" />
         <xs:anyAttribute processContents="lax" />
       </xs:restriction>
     </xs:complexContent>

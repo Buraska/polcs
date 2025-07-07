@@ -24,7 +24,7 @@ public class GameManager : MonoBehaviour
     public static GameManager Instance;
     
     public UIBlocker UIBlocker { get; private set; }
-    public EventManager EventManager { get; private set; }
+    [SerializeField] public EventManager EventManager;
     public SceneTransitionManager SceneTransitionManager { get; private set; }
     
     [CanBeNull] public InventoryManager InventoryManager { get; private set; }
@@ -40,7 +40,6 @@ public class GameManager : MonoBehaviour
         GameStateManager = GetComponent<GameStateManager>();
         InventoryManager = GetComponent<InventoryManager>();
         UIBlocker = GetComponent<UIBlocker>();
-        EventManager = GetComponent<EventManager>();
         MessageManager = GetComponent<MessageManager>();
         InventoryManager = GetComponent<InventoryManager>();
         SceneTransitionManager = GetComponent<SceneTransitionManager>();

@@ -20,7 +20,7 @@ namespace MessageSystem
                 speecher.text = name;
             }
             speechText.text = message.Replace("\\n", "\n");
-            speechPanel.SetActive(true);
+            ShowPanel();
             yield return (CustomAnimation.Fade(speechText, false, fadeSpeed));
         }
         
@@ -37,6 +37,11 @@ namespace MessageSystem
         public void HidePanel()
         {
             speechPanel.SetActive(false);
+        }
+        
+        public void ShowPanel()
+        {
+            speechPanel.SetActive(true);
         }
     }
 }

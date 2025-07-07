@@ -27,7 +27,6 @@ namespace EventActions
                     yield return null;
                 }
                 
-                GameManager.Instance.MessageManager.HideInstant();
             }
             
             animator.SetTrigger(TrScreamer);

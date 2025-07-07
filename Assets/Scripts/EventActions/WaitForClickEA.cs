@@ -7,9 +7,7 @@ namespace EventActions
     {
         public override IEnumerator ActionCoroutine()
         {
-            GameManager.Instance.UIBlocker.Block();
             yield return new WaitUntil(() => Input.GetKeyUp(KeyCode.Mouse0));
-            GameManager.Instance.UIBlocker.Unblock();
         }
     }
 }

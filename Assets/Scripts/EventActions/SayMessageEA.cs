@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using MessageSystem;
+using MessageSystem.ScriptElement;
 using UnityEngine;
 
 namespace EventActions
@@ -10,7 +11,7 @@ namespace EventActions
         [SerializeField] private SayMessageScript script;
         public override IEnumerator ActionCoroutine()
         {
-            yield return (GameManager.Instance.MessageManager.ShowMessages(script.messages));
+            yield return (GameManager.Instance.MessageManager.DisplayMessages(script.messages));
         }
     }
 }

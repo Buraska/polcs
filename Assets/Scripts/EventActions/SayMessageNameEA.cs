@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Linq;
 using MessageSystem;
+using MessageSystem.ScriptElement;
 using UnityEngine;
 
 namespace EventActions
@@ -8,10 +9,10 @@ namespace EventActions
     public class SayMessageNameEA : EventAction
     {
 
-        [SerializeField] private SayMessageNameScript script;
+        [SerializeField] private DialogScript script;
         public override IEnumerator ActionCoroutine()
         {
-            yield return (GameManager.Instance.MessageManager.ShowMessages(script.messages.Select(x => x.Message).ToArray(), script.messages.Select(x => x.CharacterScript.Name).ToArray()));
+            yield return (GameManager.Instance.MessageManager.DisplayScript(script));
         }
     }
 }
