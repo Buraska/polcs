@@ -11,24 +11,11 @@
         private void Awake()
         {
             _spriteRenderer = GetComponent<SpriteRenderer>();
+            StartCoroutine(CustomAnimation.Blinking(_spriteRenderer));
         }
 
         private void Update()
         {
-            Color color = _spriteRenderer.color;
-            color.a = Mathf.MoveTowards(color.a, _targetAlpha, fadeSpeed * Time.deltaTime);
-            _spriteRenderer.color = color;
-            if (color.a == _targetAlpha)
-            {
-                if (_targetAlpha == 1f)
-                {
-                    _targetAlpha = 0.5f;
-                }
-                else
-                {
-                    _targetAlpha = 1f;
-                }
-            }
         }
     }
 

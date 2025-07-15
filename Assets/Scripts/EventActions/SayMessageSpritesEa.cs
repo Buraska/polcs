@@ -13,25 +13,22 @@ namespace EventActions
         [SerializeField] private OmgTalkingSprite[] sprites;
         public override IEnumerator ActionCoroutine()
         {
-            int i = 0;
-            while (i < script.scriptUnit.Length)
+            foreach (var scriptUnit in script.scriptUnit)
             {
-                var message = script.scriptUnit[i].Message;
-                var character = script.scriptUnit[i].CharacterScript;
+                var character = scriptUnit.CharacterScript;
 
-                var sprite = sprites.FirstOrDefault(sprite => sprite.name == character.name);
+                var sprite = sprites.FirstOrDefault(sprite => sprite.name == character?.name);
                 if (sprite == null)
                 {
-                    Debug.Log($"Cannot find sprite with name: {character.name} in list of {sprites.Select(x => x.name).ToArray()}");
-                    yield return (GameManager.Instance.MessageManager.DisplayMessage(message, character.name));
+                    Debug.Log($"Cannot find sprite with name: {character?.name} in list of {sprites.Select(x => x.name).ToArray()}");
+                    yield return (GameManager.Instance.MessageManager.DisplayScriptUnit(scriptUnit));
                 }
                 else
                 {
                     sprite.SpriteSpeaks();
-                    yield return (GameManager.Instance.MessageManager.DisplayMessage(message, character.name));
+                    yield return (GameManager.Instance.MessageManager.DisplayScriptUnit(scriptUnit));
                     sprite.SpriteListens();    
                 }
-                i++;
             }
 
         }

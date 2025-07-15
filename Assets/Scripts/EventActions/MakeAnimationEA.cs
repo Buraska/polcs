@@ -6,14 +6,12 @@ namespace EventActions
     public class MakeAnimationEA: EventAction
     {
         [SerializeField] private Animator animator;
-        private int zoomStep = 0;
-        private static readonly int Property = Animator.StringToHash("Zoom Step");
+        private static readonly int Property = Animator.StringToHash("trigger");
 
         public override IEnumerator ActionCoroutine()
         {
             Debug.Log("ANIMATION");
-            zoomStep++;
-            animator.SetInteger(Property, zoomStep);
+            animator.SetTrigger(Property);
             yield break;
         }
 

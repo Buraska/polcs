@@ -11,7 +11,8 @@ namespace EventActions
         [SerializeField] private SayMessageScript script;
         public override IEnumerator ActionCoroutine()
         {
-            yield return (GameManager.Instance.MessageManager.DisplayMessages(script.messages));
+            // yield return (GameManager.Instance.MessageManager.DisplayScript(script));
+            yield break;
         }
     }
 }

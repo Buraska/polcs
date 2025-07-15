@@ -15,13 +15,29 @@ namespace MessageSystem
 
         public IEnumerator ShowMessage(string message, string name = null)
         {
-            if (name != null && speecher != null)
+            if (speecher != null)
             {
-                speecher.text = name;
+                if (name != null)
+                {
+                    speecher.text = name;
+                }
+                else
+                {
+                    speecher.text = "";
+                }
             }
-            speechText.text = message.Replace("\\n", "\n");
-            ShowPanel();
-            yield return (CustomAnimation.Fade(speechText, false, fadeSpeed));
+
+            if (message == "")
+            {
+                HidePanel();
+                yield break;
+            }
+            else
+            {
+                speechText.text = message.Replace("\\n", "\n");
+                ShowPanel();
+                yield return (CustomAnimation.Fade(speechText, false, fadeSpeed));
+            }
         }
         
         public IEnumerator HideMessage()

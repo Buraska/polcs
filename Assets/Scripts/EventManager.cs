@@ -11,7 +11,7 @@ public class EventManager : MonoBehaviour
     [SerializeField] private EventEntry[] _eventStorage; 
 
     private List<GameEvent.GameEvent> _events = new();
-    private Coroutine _currentCoroutine;
+    private List<Coroutine> _runningCoroutines = new List<Coroutine>();
 
     public void InvokeFromStorage(string id)
     {
@@ -36,29 +36,31 @@ public class EventManager : MonoBehaviour
 
     public void AddEvent(GameEvent.GameEvent gEvent) => _events.Add(gEvent);
 
-    public void StopCurrentEvent()
+
+    public bool isEventRunning()
     {
-        if (_currentCoroutine != null)
-        {
-            StopCoroutine(_currentCoroutine);
-            _currentCoroutine = null;
-        }
+        return _runningCoroutines.Count != 0;
     }
 
     public IEnumerator RunEvent(GameEvent.GameEvent gEvent)
     {
+        Debug.Log($"Run event {gEvent.EventName}");
         GameManager.Instance.UIBlocker.Block();
 
         _events.Add(gEvent);
         
         foreach (var action in gEvent.GetActions())
         {
-            _currentCoroutine = StartCoroutine(action.ActionCoroutine());
-            yield return _currentCoroutine;
+            var currentCoroutine = StartCoroutine(action.ActionCoroutine());
+            _runningCoroutines.Add(currentCoroutine);
+            yield return currentCoroutine;
+            _runningCoroutines.Remove(currentCoroutine);
         }
 
-        GameManager.Instance.UIBlocker.Unblock();
-
+        if (!isEventRunning())
+        {
+            GameManager.Instance.UIBlocker.Unblock();
+        }
     }
 
 
@@ -68,9 +70,7 @@ public class EventManager : MonoBehaviour
         {
             if (gEvent == null) { continue; }
 
-            Debug.Log(CanBeRun(gEvent));
             if (!CanBeRun(gEvent)) continue;
-
             yield return RunEvent(gEvent);
         }
     }
@@ -81,12 +81,13 @@ public class EventManager : MonoBehaviour
         {
             return false;
         }
-        if (gEvent.requiredEvents.Length != 0 && !EventsExist(gEvent.requiredEvents))
+
+        if (gEvent.requiredEvents.Length != 0 && !gEvent.requiredEvents.All(x => _events.Contains(x)))
         {
             return false;
         }
 
-        if (gEvent.forbiddenEvents.Length != 0 && EventsExist(gEvent.forbiddenEvents))
+        if (gEvent.forbiddenEvents.Length != 0 && gEvent.forbiddenEvents.Any(x => _events.Contains(x)))
         {
             return false;
         }

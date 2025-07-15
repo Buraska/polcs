@@ -7,7 +7,7 @@ using UnityEngine.UI;
 
     public static class CustomAnimation
     {
-            public static IEnumerator FadeImage(Image img, bool fadeIn, int coef = 8)
+            public static IEnumerator FadeImage(Image img, bool fadeIn, int speed = 8)
         
             {
                 Debug.Log(img.isActiveAndEnabled);
@@ -17,7 +17,7 @@ using UnityEngine.UI;
                 if (fadeIn)
                 {
                     // loop over 1 second backwards
-                    for (float i = 1; i >= 0; i -= Time.deltaTime * coef)
+                    for (float i = 1; i >= 0; i -= Time.deltaTime * speed)
                     {
                         col.a = i;
                         img.color = col;
@@ -28,7 +28,7 @@ using UnityEngine.UI;
                 else
                 {
                     // loop over 1 second
-                    for (float i = 0; i <= 1; i += Time.deltaTime * coef)
+                    for (float i = 0; i <= 1; i += Time.deltaTime * speed)
                     {
                         col.a = i;
                         img.color = col;
@@ -36,8 +36,8 @@ using UnityEngine.UI;
                     }
                 }
             }
-        
-            public static IEnumerator FadeImage(SpriteRenderer img, bool fadeIn, int coef = 8)
+
+            public static IEnumerator FadeImage(SpriteRenderer img, bool fadeIn, int speed = 8)
                 // Coef 0 - fades immediately
             {
                 var col = img.color;
@@ -45,14 +45,14 @@ using UnityEngine.UI;
                 
                 if (fadeIn)
                 {
-                    if (coef == 0)
+                    if (speed == 0)
                     {
                         col.a = 0;
                         img.color = col;
                         yield break;
                     }
                     
-                    for (float i = 1; i >= 0; i -= Time.deltaTime * coef)
+                    for (float i = 1; i >= 0; i -= Time.deltaTime * speed)
                     {
  
                         col.a = i;
@@ -62,13 +62,13 @@ using UnityEngine.UI;
                 }
                 else
                 {
-                    if (coef == 0)
+                    if (speed == 0)
                     {
                         col.a = 1;
                         img.color = col;
                         yield break;
                     }
-                    for (float i = 0; i <= 1; i += Time.deltaTime * coef)
+                    for (float i = 0; i <= 1; i += Time.deltaTime * speed)
                     {
 
                         col.a = i;
@@ -77,7 +77,32 @@ using UnityEngine.UI;
                     }
                 }
             }
-            
+
+            public static IEnumerator Blinking(SpriteRenderer sprite, float fadeSpeed = 1f, float minTarget = 0.5f)
+            {
+                var _targetAlpha = 1f;
+                while (true)
+                {
+                    Color color = sprite.color;
+                    color.a = Mathf.MoveTowards(color.a, _targetAlpha, fadeSpeed * Time.deltaTime);
+                    sprite.color = color;
+                    if (color.a == _targetAlpha)
+                    {
+                        if (_targetAlpha == 1f)
+                        {
+                            _targetAlpha = minTarget;
+                        }
+                        else
+                        {
+                            _targetAlpha = 1f;
+                        }
+                    }
+                
+                    yield return null;
+                }
+                yield break;
+            }
+
             public static IEnumerator Fade(TextMeshProUGUI obj, bool fadeIn, int coef = 8)
         
             {
@@ -106,7 +131,7 @@ using UnityEngine.UI;
                 }
                 obj.color = col;
             }
-            
+
             public static IEnumerator RotateOverTime(Transform transform, float angle, float duration)
             {
 

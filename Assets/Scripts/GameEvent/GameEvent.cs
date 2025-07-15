@@ -8,7 +8,6 @@ using UnityEngine.Events;
 namespace GameEvent
 {
     
-    [CreateAssetMenu(fileName = "Game event", menuName = "Game event")]
     public class GameEvent : MonoBehaviour
     {
         [SerializeField] public GameEvent[] requiredEvents;

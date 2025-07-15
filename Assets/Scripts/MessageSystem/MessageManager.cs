@@ -65,7 +65,7 @@ namespace MessageSystem
             ui = messageUI;
         }
 
-        public IEnumerator DisplayMessage(string message, string name = null)
+        private IEnumerator DisplayMessage(string message, string name = null)
         {
             yield return ui.ShowMessage(message, name);
             yield return new WaitUntil(() => !Input.GetKey(KeyCode.Mouse0));
@@ -73,7 +73,7 @@ namespace MessageSystem
             Debug.Log($"Stops DisplayMessage({message})");
             yield return ui.HideMessage();
         }
-        public IEnumerator DisplayMessages(string[] messages)
+        private IEnumerator DisplayMessages(string[] messages)
         {
             foreach (var message in messages)
             {
@@ -90,27 +90,33 @@ namespace MessageSystem
         {
             foreach (var scriptUnit in scriptObjects)
             {
+                yield return DisplayScriptUnit(scriptUnit);
+            }
+            ui.HidePanel();
+        }
+
+        public IEnumerator DisplayScriptUnit(SayMessageNameObj scriptUnit)
+        {
+            Debug.Log($"Displaying {scriptUnit.Message}");
+            if (scriptUnit.eventTriggerId != "")
+            {
+                GameManager.Instance.EventManager.InvokeFromStorage(scriptUnit.eventTriggerId);
+            }
+
+            if (scriptUnit.choices.Length > 0)
+            {
+                ui.HidePanel();
+                yield return DisplayChoices(scriptUnit.choices);
+            }
+            else if (scriptUnit.CharacterScript == null)
+            {
+                Debug.Log(scriptUnit.Message);
+                yield return DisplayMessage(scriptUnit.Message);
+            }
+            else if (scriptUnit.CharacterScript != null)
+            {
                 Debug.Log($"Displaying {scriptUnit.Message}");
-                if (scriptUnit.eventTriggerId != "")
-                {
-                    GameManager.Instance.EventManager.InvokeFromStorage(scriptUnit.eventTriggerId);
-                }
-                
-                if (scriptUnit.choices.Length > 0)
-                {
-                    ui.HidePanel();
-                    yield return DisplayChoices(scriptUnit.choices);
-                }
-                else if (scriptUnit.CharacterScript == null)
-                {
-                    Debug.Log(scriptUnit.Message);
-                    yield return DisplayMessage(scriptUnit.Message);
-                }
-                else if (scriptUnit.CharacterScript != null)
-                {
-                    Debug.Log($"Displaying {scriptUnit.Message}");
-                    yield return DisplayMessage(scriptUnit.Message, scriptUnit.CharacterScript.name);
-                }
+                yield return DisplayMessage(scriptUnit.Message, scriptUnit.CharacterScript.name);
             }
             ui.HidePanel();
         }
