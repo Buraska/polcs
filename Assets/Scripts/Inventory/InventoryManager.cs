@@ -1,4 +1,5 @@
 using System.Collections;
+using System.Net.Mime;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -7,7 +8,7 @@ namespace Inventory
     public class InventoryManager : MonoBehaviour
     {
         [SerializeField] private ItemModel[] items = new ItemModel[10];
-        [SerializeField] private Image inventoryBar;
+        [SerializeField] private Transform inventoryBar;
 
     
         private int _selectedIndex = -1;
@@ -17,16 +18,16 @@ namespace Inventory
 
         public bool IsAnySlotSelected => _selectedIndex != -1;
         
-        private Image[] _slotImages;
+        private Transform[] _slots;
 
         private void Start()
         {
-            var slotCount = inventoryBar.transform.childCount;
-            _slotImages = new Image[slotCount];
+            var slotCount = inventoryBar.childCount;
+            _slots = new Transform[slotCount];
 
             for (var i = 0; i < slotCount; i++)
             {
-                _slotImages[i] = inventoryBar.transform.GetChild(i).GetChild(0).GetComponent<Image>();
+                _slots[i] = inventoryBar.GetChild(i);
             }
         }
 
@@ -45,11 +46,18 @@ namespace Inventory
         {
             inventoryBar.gameObject.SetActive(value);
         }
+
+        private Image GetSlotImage(int ind)
+        {
+            return _slots[ind].GetChild(0).GetComponent<Image>();
+        }
     
         public void Add(ItemModel item)
         {
             var slotInd = GetFreeSlotIndex();
-            var slotImage = _slotImages[slotInd];
+            var slot = _slots[slotInd];
+            var slotImage = slot.GetChild(0).GetComponent<Image>();
+            slot.transform.gameObject.SetActive(true);
             items[slotInd] = item;
             slotImage.sprite = item.sprite;
             slotImage.color = _normalColor;
@@ -86,12 +94,14 @@ namespace Inventory
         public IEnumerator Remove(ItemModel item)
         {
             var itemIndex = GetItemIndex(item);
-            var slotImage = inventoryBar.transform.GetChild(itemIndex).GetChild(0).GetComponent<Image>();
-
-            yield return GameManager.Instance.StartCoroutine(CustomAnimation.FadeImage(slotImage, true, 12));
-        
+            var slot = inventoryBar.GetChild(itemIndex);
+            var slotImage = inventoryBar.GetChild(itemIndex).GetChild(0).GetComponent<Image>();
+            yield return GameManager.Instance.StartCoroutine(CustomAnimation.FadeImage(slotImage, true, 12)); 
+            slot.transform.gameObject.SetActive(false);
+            
             slotImage.sprite = null;
             slotImage.color = new Color(56, 56, 56, 0);
+            slotImage.enabled = false;
             items[itemIndex] = null;
 
         }
@@ -100,7 +110,7 @@ namespace Inventory
         {
             if (GameManager.Instance.GameStateManager.GameState == GameState.UsingItem) return;
 
-            var item = items[slotId];
+            var item = GetSlotImage(slotId);
             if (item == null)
             {
                 return;
@@ -108,12 +118,12 @@ namespace Inventory
         
             if (_selectedIndex != -1)
             {
-                var prevSlot = _slotImages[_selectedIndex];
+                var prevSlot =GetSlotImage(_selectedIndex);
                 prevSlot.color = _normalColor;
             }
 
             _selectedIndex = slotId;
-            _slotImages[slotId].color = _selectedItemColor;
+            GetSlotImage(slotId).color = _selectedItemColor;
             GameManager.Instance.GameStateManager.SetUsingItem();
             GameManager.Instance.StartCoroutine(SelectItemCoroutine());
         }
@@ -121,14 +131,14 @@ namespace Inventory
         private IEnumerator SelectItemCoroutine()
         {
             yield return new WaitUntil(() => GameManager.Instance.GameStateManager.GameState != GameState.UsingItem);
-            _slotImages[_selectedIndex].color = _normalColor;
+            GetSlotImage(_selectedIndex).color = _normalColor;
             Unselect();
         }
 
         private void Unselect()
         {
             if (_selectedIndex == -1) return;
-            _slotImages[_selectedIndex].color = _normalColor;
+            GetSlotImage(_selectedIndex).color = _normalColor;
             _selectedIndex = -1;
         }
 

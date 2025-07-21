@@ -23,6 +23,9 @@ using UnityEngine.UI;
                         img.color = col;
                         yield return null;
                     }
+
+                    col.a = 0;
+                    img.color = col;
                 }
                 // fade from transparent to opaque
                 else
@@ -34,6 +37,8 @@ using UnityEngine.UI;
                         img.color = col;
                         yield return null;
                     }
+                    col.a = 1;
+                    img.color = col;
                 }
             }
 

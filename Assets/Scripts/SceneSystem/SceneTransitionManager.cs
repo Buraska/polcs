@@ -17,6 +17,7 @@ namespace SceneSystem
         {
             foreach (var localScene in localScenes) { localScene.SetActive(false); }
             localScenes[currentSceneNumber].SetActive(true);
+            GameManager.Instance.StartCoroutine(EndTransition(2));
         }
 
         public IEnumerator DisableObjectCoroutine(GameObject obj, int fadeSpeed = 8)
@@ -24,35 +25,44 @@ namespace SceneSystem
             yield return (CustomAnimation.FadeImage(obj.transform.GetComponent<SpriteRenderer>(), true, fadeSpeed));
             obj.SetActive(false);
         }
+        
+        public IEnumerator DisableSpriteCoroutine(SpriteRenderer obj, int fadeSpeed = 8)
+        {
+            yield return (CustomAnimation.FadeImage(obj.transform.GetComponent<SpriteRenderer>(), true, fadeSpeed));
+            obj.enabled = false;
+        }
     
         public IEnumerator EnableObjectCoroutine(GameObject obj, int fadeSpeed = 8)
         {
             obj.SetActive(true);
             yield return (CustomAnimation.FadeImage(obj.transform.GetComponent<SpriteRenderer>(), false, fadeSpeed));
         }
-    
+
 
         public IEnumerator TransitionToSceneCoroutine(int sceneNum, int speed = 8)
         {
-            yield return (CustomAnimation.FadeImage(sceneBlocker, false, speed));
+            yield return StartTransition(speed);
         
             localScenes[currentSceneNumber].SetActive(false);
             localScenes[sceneNum].SetActive(true);
             currentSceneNumber = sceneNum;
 
-            yield return (CustomAnimation.FadeImage(sceneBlocker, true, speed));
+            yield return EndTransition(speed);
         }
         
-        public IEnumerator TransitionToSceneCoroutine(Scene scene)
+        public IEnumerator StartTransition(int speed)
         {
-            yield return (CustomAnimation.FadeImage(sceneBlocker, false));
-            var newSceneInd = Array.IndexOf(localScenes, scene);
-            localScenes[currentSceneNumber].SetActive(false);
-            localScenes[newSceneInd].SetActive(true);
-            currentSceneNumber = newSceneInd;
-
-            yield return (CustomAnimation.FadeImage(sceneBlocker, true));
+            sceneBlocker.enabled = true;
+            yield return (CustomAnimation.FadeImage(sceneBlocker, false, speed));
         }
+    
+        public IEnumerator EndTransition(int speed)
+        {
+            yield return (CustomAnimation.FadeImage(sceneBlocker, true, speed));
+            sceneBlocker.enabled = false;
+        }
+        
+
         public IEnumerator ChangeSceneToCoroutine(Scene oldScene, Scene newScene)
         {
             var oldSceneInd = Array.IndexOf(localScenes, oldScene);
@@ -66,11 +76,11 @@ namespace SceneSystem
             {
                 localScenes[oldSceneInd] = newScene;
                 
-                yield return (CustomAnimation.FadeImage(sceneBlocker, false));
+                yield return StartTransition(0);
                 oldScene.SetActive(false);
                 localScenes[currentSceneNumber].SetActive(true);
 
-                yield return (CustomAnimation.FadeImage(sceneBlocker, true));
+                yield return EndTransition(0);
             }
             else localScenes[oldSceneInd] = newScene;
         }

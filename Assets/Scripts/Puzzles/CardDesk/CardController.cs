@@ -26,7 +26,7 @@ namespace Puzzles.CardDesk
             //TODO BLOCK UI
             card.isTurned = true;
             yield return (card.openCard(_cards[cardsTurned].CardFace));
-            yield return GameManager.Instance.EventManager.RunEvents(new []{_cards[cardsTurned].GameEvent});
+            GameManager.Instance.StartCoroutine(GameManager.Instance.EventManager.RunEvents(new []{_cards[cardsTurned].GameEvent}));
             cardsTurned++;
         }
     }

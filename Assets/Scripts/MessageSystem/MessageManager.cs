@@ -62,6 +62,7 @@ namespace MessageSystem
 
         public void SetMessageUi(MessageUI messageUI)
         {
+            Debug.Log($"MessageUi set on {messageUI}");
             ui = messageUI;
         }
 
@@ -98,7 +99,7 @@ namespace MessageSystem
         public IEnumerator DisplayScriptUnit(SayMessageNameObj scriptUnit)
         {
             Debug.Log($"Displaying {scriptUnit.Message}");
-            if (scriptUnit.eventTriggerId != "")
+            if (scriptUnit.eventTriggerId.Trim() != "")
             {
                 GameManager.Instance.EventManager.InvokeFromStorage(scriptUnit.eventTriggerId);
             }

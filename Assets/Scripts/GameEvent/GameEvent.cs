@@ -10,6 +10,8 @@ namespace GameEvent
     
     public class GameEvent : MonoBehaviour
     {
+        public bool runAtOnce = false;
+        
         [SerializeField] public GameEvent[] requiredEvents;
         
         [SerializeField] public  GameEvent[] forbiddenEvents;
@@ -27,16 +29,6 @@ namespace GameEvent
         public virtual bool CanBeRunCustom()
         {
             return true;
-        }
-
-
-        public IEnumerator Act()
-        {
-            foreach (var action in actions)
-            {
-                yield return GameManager.Instance.StartCoroutine(action.ActionCoroutine());
-            }
-        
         }
     }
 }

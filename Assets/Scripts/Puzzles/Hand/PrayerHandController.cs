@@ -28,13 +28,15 @@ namespace Puzzles.Hand
         void Update()
         {
             if (isSolved) return;
-            if (_lineRenderers.Count > 0)
+            if (GameManager.Instance.EventManager.isEventRunning())
             {
-                GameManager.Instance.UIBlocker.Block();
-            }else GameManager.Instance.UIBlocker.Unblock();
+                return;
+            }
+   
 
             if (Input.GetMouseButtonDown(0)) // ЛКМ нажата
             {
+                Debug.Log("HERE!");
                 startMousePos = GetMouseWorldPosition();
                 isDrawing = true;
                 _currentLinePrefab = Instantiate(prefabWithLine);
@@ -62,7 +64,7 @@ namespace Puzzles.Hand
                 _currentLine.SetPosition(1, currentMousePos);
             }
 
-            if (Input.GetMouseButtonUp(0)) // ЛКМ отпущена
+            if (isDrawing && Input.GetMouseButtonUp(0)) // ЛКМ отпущена
             {
                 isDrawing = false;
                 if (Vector3.Distance(_currentLine.GetPosition(0), _currentLine.GetPosition(1)) < 1f)
@@ -72,6 +74,11 @@ namespace Puzzles.Hand
                 else _lineRenderers.Add(_currentLinePrefab);
                 ArePointsSeparated();
                 isSolved = stars.All(star => star.isSeparated);
+                
+                if (_lineRenderers.Count > 0)
+                {
+                    GameManager.Instance.UIBlocker.Block();
+                }else GameManager.Instance.UIBlocker.Unblock();
             }
         }
 
@@ -81,6 +88,8 @@ namespace Puzzles.Hand
             {
                 Destroy(line);
             }
+            isDrawing = false;
+
         }
 
         private void OnDisable()

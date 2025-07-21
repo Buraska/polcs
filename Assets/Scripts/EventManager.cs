@@ -15,7 +15,7 @@ public class EventManager : MonoBehaviour
 
     public void InvokeFromStorage(string id)
     {
-        var gEvent = _eventStorage?.First(x => x.id == id).gameEvent;
+        var gEvent = _eventStorage.FirstOrDefault(x => x.id == id)?.gameEvent;
         if(gEvent != null)
         {
             Debug.Log(id);
@@ -39,38 +39,77 @@ public class EventManager : MonoBehaviour
 
     public bool isEventRunning()
     {
+        if (_runningCoroutines.Count != 0)
+        {
+            Debug.Log($"Cannot run Event. Event count is {_runningCoroutines.Count}");
+            
+        }
         return _runningCoroutines.Count != 0;
     }
 
-    public IEnumerator RunEvent(GameEvent.GameEvent gEvent)
+    public void UnBlockUI()
     {
-        Debug.Log($"Run event {gEvent.EventName}");
-        GameManager.Instance.UIBlocker.Block();
-
-        _events.Add(gEvent);
-        
-        foreach (var action in gEvent.GetActions())
-        {
-            var currentCoroutine = StartCoroutine(action.ActionCoroutine());
-            _runningCoroutines.Add(currentCoroutine);
-            yield return currentCoroutine;
-            _runningCoroutines.Remove(currentCoroutine);
-        }
-
         if (!isEventRunning())
         {
             GameManager.Instance.UIBlocker.Unblock();
         }
     }
+    
+    public void BlockUI()
+    {
+        GameManager.Instance.UIBlocker.Unblock();
+    }
+
+    public IEnumerator RunEvent(GameEvent.GameEvent gEvent)
+    {
+        Debug.Log($"Run event {gEvent.EventName}");
+        _events.Add(gEvent); // It has to be at the begging. In other case Game event can be properly forbidden to be reproduced twice
+
+        GameManager.Instance.UIBlocker.Block();
+
+        if (gEvent.runAtOnce)
+        {
+            var tempCurrentCoroutines = new List<Coroutine>();
+            foreach (var action in gEvent.GetActions())
+            {
+                var currentCoroutine = StartCoroutine(action.ActionCoroutine());
+                tempCurrentCoroutines.Add(currentCoroutine);
+            }
+            foreach (var coroutine in tempCurrentCoroutines)
+            {
+                yield return coroutine;
+            }
+            tempCurrentCoroutines.Clear();
+        }
+        else
+        {
+            foreach (var action in gEvent.GetActions())
+            {
+                var currentCoroutine = StartCoroutine(action.ActionCoroutine());
+                _runningCoroutines.Add(currentCoroutine);
+                yield return currentCoroutine;
+                _runningCoroutines.Remove(currentCoroutine);
+            }          
+        }
+
+        UnBlockUI();
+        Debug.Log($"End running event {gEvent.EventName}");
+    }
 
 
     public IEnumerator RunEvents(GameEvent.GameEvent[] gameEvents)
     {
+        Debug.Log("Start running events");
         foreach (var gEvent in gameEvents)
         {
             if (gEvent == null) { continue; }
 
-            if (!CanBeRun(gEvent)) continue;
+            if (!CanBeRun(gEvent))
+            {
+                Debug.Log($"Cant run event {gEvent.EventName}");
+                continue;
+            }
+
             yield return RunEvent(gEvent);
         }
     }

@@ -12,6 +12,7 @@ namespace EventActions
         
         public override IEnumerator ActionCoroutine()
         {
+            Debug.Log($"Changing MessageUI");
             GameManager.Instance.MessageManager.SetMessageUi(MessageUI);
             yield break;
         }

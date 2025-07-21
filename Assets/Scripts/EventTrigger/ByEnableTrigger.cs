@@ -10,6 +10,7 @@ namespace EventTrigger
 
         private void OnEnable()
         {
+            Debug.Log("BY enable triggered.");
             GameManager.Instance.StartCoroutine(RunWhenGameNotBusy());
         }
         
