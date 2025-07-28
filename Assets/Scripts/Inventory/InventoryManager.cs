@@ -90,18 +90,16 @@ namespace Inventory
             var itemIndex = GetItemIndex(item);
             var slot = inventoryBar.GetChild(itemIndex);
             var slotImage = inventoryBar.GetChild(itemIndex).GetChild(0).GetComponent<Image>();
-            yield return GameManager.Instance.StartCoroutine(CustomAnimation.FadeImage(slotImage, true, 12));
             slot.transform.gameObject.SetActive(false);
 
             slotImage.sprite = null;
-            slotImage.color = new Color(56, 56, 56, 0);
-            slotImage.enabled = false;
             items[itemIndex] = null;
 
             if (GetFreeSlotIndex() == 0)
             {
                 SetImageAcitve(false);
             }
+            yield break;
         }
 
         public void SelectSlot(int slotId)
