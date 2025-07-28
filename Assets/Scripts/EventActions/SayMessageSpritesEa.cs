@@ -1,9 +1,8 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Linq;
-using MessageSystem;
 using MessageSystem.ScriptElement;
 using UnityEngine;
-using UnityEngine.Serialization;
 
 namespace EventActions
 {
@@ -11,6 +10,7 @@ namespace EventActions
     {
         [SerializeField] private DialogScript script;
         [SerializeField] private OmgTalkingSprite[] sprites;
+
         public override IEnumerator ActionCoroutine()
         {
             foreach (var scriptUnit in script.scriptUnit)
@@ -20,24 +20,24 @@ namespace EventActions
                 var sprite = sprites.FirstOrDefault(sprite => sprite.name == character?.name);
                 if (sprite == null)
                 {
-                    Debug.Log($"Cannot find sprite with name: {character?.name} in list of {sprites.Select(x => x.name).ToArray()}");
-                    yield return (GameManager.Instance.MessageManager.DisplayScriptUnit(scriptUnit));
+                    Debug.Log(
+                        $"Cannot find sprite with name: {character?.name} in list of {sprites.Select(x => x.name).ToArray()}");
+                    yield return GameManager.Instance.MessageManager.DisplayScriptUnit(scriptUnit);
                 }
                 else
                 {
                     sprite.SpriteSpeaks();
-                    yield return (GameManager.Instance.MessageManager.DisplayScriptUnit(scriptUnit));
-                    sprite.SpriteListens();    
+                    yield return GameManager.Instance.MessageManager.DisplayScriptUnit(scriptUnit);
+                    sprite.SpriteListens();
                 }
             }
-
         }
     }
-    [System.Serializable] 
+
+    [Serializable]
     public class Speech
     {
         public OmgTalkingSprite Sprite;
         public string Message;
     }
-    
 }

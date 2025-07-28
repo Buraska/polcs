@@ -6,8 +6,8 @@ namespace EventActions
 {
     public class TakeItemEA : EventAction
     {
-
         [SerializeField] private ItemModel item;
+
         public override IEnumerator ActionCoroutine()
         {
             GameManager.Instance.InventoryManager.Add(item);

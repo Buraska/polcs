@@ -4,11 +4,11 @@ using UnityEngine;
 
 namespace Puzzles.Nightmare
 {
-    public class NightmareZoomEA: EventAction
+    public class NightmareZoomEA : EventAction
     {
+        private static readonly int Property = Animator.StringToHash("Zoom Step");
         [SerializeField] private NightmareController _nightmareController;
         [SerializeField] private Animator animator;
-        private static readonly int Property = Animator.StringToHash("Zoom Step");
 
         public override IEnumerator ActionCoroutine()
         {

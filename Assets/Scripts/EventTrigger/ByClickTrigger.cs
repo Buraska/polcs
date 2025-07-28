@@ -1,5 +1,4 @@
-﻿using Inventory;
-using UnityEngine;
+﻿using UnityEngine;
 using UnityEngine.EventSystems;
 
 namespace EventTrigger
@@ -12,6 +11,5 @@ namespace EventTrigger
             if (GameManager.Instance.GameStateManager.GameState != GameState.Exploring) return;
             GameManager.Instance.StartCoroutine(GameManager.Instance.EventManager.RunEvents(gameEvents));
         }
-
     }
 }

@@ -1,11 +1,9 @@
-﻿using System;
-using UnityEngine;
+﻿using UnityEngine;
 
 namespace Puzzles.StarMap
 {
-    public class StarMapPointer: MonoBehaviour
+    public class StarMapPointer : MonoBehaviour
     {
-        
         [SerializeField] private Arrow _x;
         [SerializeField] private Arrow _y;
 
@@ -16,6 +14,5 @@ namespace Puzzles.StarMap
         {
             transform.localPosition = new Vector3(_xLocs[_x.CurrentPositionInd], _yLocs[_y.CurrentPositionInd]);
         }
-
     }
 }

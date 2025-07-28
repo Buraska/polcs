@@ -1,10 +1,7 @@
-using System;
 using System.Collections;
-using System.Collections.Generic;
 using MessageSystem.ScriptElement;
 using TMPro;
 using UnityEngine;
-using UnityEngine.Rendering;
 using UnityEngine.UI;
 
 namespace MessageSystem
@@ -16,9 +13,9 @@ namespace MessageSystem
         [SerializeField] private Button choiceButtonPrefab;
 
         private Coroutine _chosenScript;
-        private bool isWaitingForChoice = false;
+        private bool isWaitingForChoice;
 
-        Button CreateChoiceButton(Choice choice)
+        private Button CreateChoiceButton(Choice choice)
         {
             var choiceButton = Instantiate(choiceButtonPrefab);
             var buttonText = choiceButton.GetComponentInChildren<TextMeshProUGUI>();
@@ -39,15 +36,11 @@ namespace MessageSystem
         private void RefreshChoiceView()
         {
             if (choiceHolder != null)
-            {
                 foreach (var button in choiceHolder.GetComponentsInChildren<Button>())
-                {
                     Destroy(button.gameObject);
-                }
-            }
         }
-        
-        
+
+
         private IEnumerator DisplayChoices(Choice[] choices)
         {
             isWaitingForChoice = true;
@@ -56,7 +49,8 @@ namespace MessageSystem
             {
                 var button = CreateChoiceButton(choice);
             }
-            yield return new WaitUntil( () => !isWaitingForChoice);
+
+            yield return new WaitUntil(() => !isWaitingForChoice);
             yield return _chosenScript;
         }
 
@@ -74,25 +68,20 @@ namespace MessageSystem
             Debug.Log($"Stops DisplayMessage({message})");
             yield return ui.HideMessage();
         }
+
         private IEnumerator DisplayMessages(string[] messages)
         {
-            foreach (var message in messages)
-            {
-                yield return DisplayMessage(message);
-            }
+            foreach (var message in messages) yield return DisplayMessage(message);
         }
 
         public IEnumerator DisplayScript(DialogScript script)
         {
             yield return DisplayScript(script.scriptUnit);
         }
-        
+
         public IEnumerator DisplayScript(SayMessageNameObj[] scriptObjects)
         {
-            foreach (var scriptUnit in scriptObjects)
-            {
-                yield return DisplayScriptUnit(scriptUnit);
-            }
+            foreach (var scriptUnit in scriptObjects) yield return DisplayScriptUnit(scriptUnit);
             ui.HidePanel();
         }
 
@@ -100,9 +89,7 @@ namespace MessageSystem
         {
             Debug.Log($"Displaying {scriptUnit.Message}");
             if (scriptUnit.eventTriggerId.Trim() != "")
-            {
                 GameManager.Instance.EventManager.InvokeFromStorage(scriptUnit.eventTriggerId);
-            }
 
             if (scriptUnit.choices.Length > 0)
             {
@@ -119,6 +106,7 @@ namespace MessageSystem
                 Debug.Log($"Displaying {scriptUnit.Message}");
                 yield return DisplayMessage(scriptUnit.Message, scriptUnit.CharacterScript.name);
             }
+
             ui.HidePanel();
         }
     }

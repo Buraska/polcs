@@ -1,50 +1,42 @@
-﻿using System;
-using TMPro;
-using Unity.VisualScripting;
-using UnityEngine;
-using Update = UnityEngine.PlayerLoop.Update;
+﻿using UnityEngine;
 
 namespace Puzzles
 {
     public class StarController : MonoBehaviour
     {
-        
-        [SerializeField]private Transform starAnchor;
+        private const float BoardRadius = 4.4f;
 
-        [SerializeField]private KnobController knobX;
-        [SerializeField]private KnobController knobY;
+        [SerializeField] private Transform starAnchor;
 
-        private Vector2 _startPos;
+        [SerializeField] private KnobController knobX;
+        [SerializeField] private KnobController knobY;
         private Vector2 _endPos;
         private SpriteRenderer _sprite;
 
-        private const float BoardRadius = 4.4f;
+        private Vector2 _startPos;
 
-        private void Update()
-        {
-            gameObject.transform.position = Vector3.Lerp(gameObject.transform.position, GetCurrentPosition(), Time.deltaTime * 3);
 
-            _sprite.enabled = !IsAfterTheRadius();
-        }
-        
-        
         private void Awake()
-        {   
+        {
             _startPos = gameObject.transform.position;
             var distanceToAnchor = (Vector2)starAnchor.position - _startPos;
             _endPos = distanceToAnchor / knobX.keyValue;
             _endPos.y = distanceToAnchor.y / knobY.keyValue;
-            
-            _sprite = ((SpriteRenderer) gameObject.GetComponent(typeof(SpriteRenderer)));
 
+            _sprite = (SpriteRenderer)gameObject.GetComponent(typeof(SpriteRenderer));
+        }
+
+        private void Update()
+        {
+            gameObject.transform.position =
+                Vector3.Lerp(gameObject.transform.position, GetCurrentPosition(), Time.deltaTime * 3);
+
+            _sprite.enabled = !IsAfterTheRadius();
         }
 
         private bool IsAfterTheRadius()
         {
-            if (Vector3.Distance(Vector3.zero, gameObject.transform.position) > BoardRadius)
-            {
-                return true;
-            }
+            if (Vector3.Distance(Vector3.zero, gameObject.transform.position) > BoardRadius) return true;
             return false;
         }
 
@@ -56,6 +48,5 @@ namespace Puzzles
             currentPosition += _startPos;
             return currentPosition;
         }
-
     }
 }

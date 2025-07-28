@@ -2,9 +2,9 @@
 
 namespace Puzzles
 {
-    public abstract class BasePuzzleElement: MonoBehaviour
+    public abstract class BasePuzzleElement : MonoBehaviour
 
     {
-    public abstract bool IsSolved();
+        public abstract bool IsSolved();
     }
 }

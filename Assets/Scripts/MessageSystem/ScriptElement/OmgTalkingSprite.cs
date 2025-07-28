@@ -2,7 +2,7 @@
 
 namespace MessageSystem.ScriptElement
 {
-    public class OmgTalkingSprite: MonoBehaviour
+    public class OmgTalkingSprite : MonoBehaviour
     {
         public string name;
         public SpriteRenderer talkingSprite;
@@ -13,7 +13,7 @@ namespace MessageSystem.ScriptElement
             talkingSprite.enabled = true;
             listeningSprite.enabled = false;
         }
-        
+
         public void SpriteListens()
         {
             listeningSprite.enabled = true;

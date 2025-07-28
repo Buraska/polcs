@@ -1,6 +1,4 @@
 ﻿using System.Collections;
-using System.Collections.Generic;
-using Unity.VisualScripting;
 using UnityEngine;
 
 public enum GameState
@@ -9,15 +7,16 @@ public enum GameState
     UsingItem,
     Dialogue
 }
+
 public class GameStateManager : MonoBehaviour
 {
-    public GameState GameState {get; private set; }
+    public GameState GameState { get; private set; }
 
     public Coroutine SetUsingItem()
     {
         return StartCoroutine(SetUsingItemCoroutine());
     }
-    
+
     private IEnumerator SetUsingItemCoroutine()
     {
         GameState = GameState.UsingItem;

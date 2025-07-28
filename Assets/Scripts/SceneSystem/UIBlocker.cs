@@ -1,14 +1,13 @@
-﻿using System.Collections;
-using UnityEngine;
+﻿using UnityEngine;
 using UnityEngine.Serialization;
 using UnityEngine.UI;
 
 namespace SceneSystem
 {
-    [RequireComponent(typeof(Image))]
     public class UIBlocker : MonoBehaviour
     {
-        [FormerlySerializedAs("uiBlock")] [SerializeField] private Image uiBlocker;
+        [FormerlySerializedAs("uiBlock")] [SerializeField]
+        private Image uiBlocker;
 
         public bool IsBlocked { get; private set; }
 
@@ -25,8 +24,5 @@ namespace SceneSystem
             IsBlocked = false;
             uiBlocker.enabled = IsBlocked;
         }
-    
-
-
     }
 }

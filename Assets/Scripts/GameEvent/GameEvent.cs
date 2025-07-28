@@ -1,30 +1,25 @@
-﻿using System.Collections;
-using System.Linq;
-using EventActions;
-using Unity.VisualScripting;
+﻿using EventActions;
 using UnityEngine;
-using UnityEngine.Events;
 
 namespace GameEvent
 {
-    
     public class GameEvent : MonoBehaviour
     {
-        public bool runAtOnce = false;
-        
+        public bool runAtOnce;
+
         [SerializeField] public GameEvent[] requiredEvents;
-        
-        [SerializeField] public  GameEvent[] forbiddenEvents;
+
+        [SerializeField] public GameEvent[] forbiddenEvents;
 
         [SerializeField] public EventAction[] actions;
-        
+
         public string EventName => name;
 
         public EventAction[] GetActions()
         {
             return actions;
         }
-        
+
 
         public virtual bool CanBeRunCustom()
         {

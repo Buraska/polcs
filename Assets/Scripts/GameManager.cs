@@ -1,36 +1,23 @@
-using System;
-using System.Collections;
-using System.Collections.Generic;
-using System.Linq;
-using EventTrigger;
-using GameEvent;
 using Inventory;
 using JetBrains.Annotations;
 using MessageSystem;
 using SceneSystem;
-using TMPro;
 using UnityEngine;
-using UnityEngine.SceneManagement;
-using UnityEngine.Serialization;
-using UnityEngine.UI;
 
-[RequireComponent(typeof(MessageManager))]
-[RequireComponent(typeof(InventoryUI))]
 [RequireComponent(typeof(UIBlocker))]
 [RequireComponent(typeof(SceneTransitionManager))]
-[RequireComponent(typeof(EventManager))]
 public class GameManager : MonoBehaviour
 {
     public static GameManager Instance;
-    
-    public UIBlocker UIBlocker { get; private set; }
     [SerializeField] public EventManager EventManager;
+
+    public UIBlocker UIBlocker { get; private set; }
     public SceneTransitionManager SceneTransitionManager { get; private set; }
-    
-    [CanBeNull] public InventoryManager InventoryManager { get; private set; }
-    
-    public MessageManager MessageManager { get; private set; }
-    
+
+    [SerializeField] public InventoryManager InventoryManager;
+
+    [SerializeField] public MessageManager MessageManager;
+
     public GameStateManager GameStateManager { get; private set; }
 
 
@@ -38,12 +25,8 @@ public class GameManager : MonoBehaviour
     {
         Instance = this;
         GameStateManager = GetComponent<GameStateManager>();
-        InventoryManager = GetComponent<InventoryManager>();
         UIBlocker = GetComponent<UIBlocker>();
-        MessageManager = GetComponent<MessageManager>();
-        InventoryManager = GetComponent<InventoryManager>();
         SceneTransitionManager = GetComponent<SceneTransitionManager>();
-        
     }
 }
 

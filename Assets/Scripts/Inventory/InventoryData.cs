@@ -2,43 +2,42 @@
 {
     public class InventoryData
     {
-        private readonly ItemModel[] items;
-
         public InventoryData(int size)
         {
-            items = new ItemModel[size];
+            Items = new ItemModel[size];
         }
 
-        public ItemModel[] Items => items;
+        public ItemModel[] Items { get; }
 
         public int GetFreeSlotIndex()
         {
-            for (int i = 0; i < items.Length; i++)
-            {
-                if (items[i] == null) return i;
-            }
+            for (var i = 0; i < Items.Length; i++)
+                if (Items[i] == null)
+                    return i;
             return -1;
         }
 
         public int GetItemIndex(ItemModel item)
         {
-            for (int i = 0; i < items.Length; i++)
-            {
-                if (items[i]?.id == item.id) return i;
-            }
+            for (var i = 0; i < Items.Length; i++)
+                if (Items[i]?.id == item.id)
+                    return i;
             return -1;
         }
 
         public void AddItem(ItemModel item, int index)
         {
-            items[index] = item;
+            Items[index] = item;
         }
 
         public void RemoveItem(int index)
         {
-            items[index] = null;
+            Items[index] = null;
         }
 
-        public ItemModel GetItem(int index) => items[index];
+        public ItemModel GetItem(int index)
+        {
+            return Items[index];
+        }
     }
 }

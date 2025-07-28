@@ -1,20 +1,17 @@
-﻿using System;
-using UnityEngine;
+﻿using UnityEngine;
 using UnityEngine.EventSystems;
-using UnityEngine.Serialization;
 
 namespace Puzzles.StarMap
 {
-    public class Arrow: BasePuzzleElement, IPointerDownHandler
+    public class Arrow : BasePuzzleElement, IPointerDownHandler
     {
-        [SerializeField] public int CurrentPositionInd  = 2;
-        private int _transmission = 1;
+        [SerializeField] public int CurrentPositionInd = 2;
         [SerializeField] private int _truePos;
-        [SerializeField] private int[] _positions = new[] { 60, 38, 12, -12, -38, -60, -90 };
+        [SerializeField] private int[] _positions = { 60, 38, 12, -12, -38, -60, -90 };
+        private int _transmission = 1;
 
         private void Awake()
         {
-
             gameObject.transform.rotation = Quaternion.Euler(0, 0, _positions[CurrentPositionInd]);
         }
 
@@ -26,15 +23,9 @@ namespace Puzzles.StarMap
 
         private int Transmit()
         {
-            
             if (CurrentPositionInd == 0)
-            {
                 _transmission = 1;
-            }
-            else if (CurrentPositionInd == _positions.Length - 1)
-            {
-                _transmission = -1;
-            }
+            else if (CurrentPositionInd == _positions.Length - 1) _transmission = -1;
             CurrentPositionInd += _transmission;
             return CurrentPositionInd;
         }

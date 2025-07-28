@@ -1,17 +1,14 @@
-﻿using System;
-using System.Collections;
+﻿using System.Collections;
 using System.Linq;
-using GameEvent;
 using Puzzles;
 using UnityEngine;
 
 namespace EventTrigger
 {
-    public class PuzzleTrigger: Trigger
+    public class PuzzleTrigger : Trigger
     {
         [SerializeField] private BasePuzzleElement[] _puzzleElements;
         [SerializeField] private int waitWhenSolved = 3;
-
 
 
         private void Start()
@@ -23,19 +20,16 @@ namespace EventTrigger
         {
             while (true)
             {
-                yield return new WaitUntil((() => ArePuzzlesSolved()));
+                yield return new WaitUntil(() => ArePuzzlesSolved());
 
                 yield return new WaitForSecondsRealtime(waitWhenSolved);
 
-                if (!ArePuzzlesSolved())
-                {
-                    continue;
-                }
+                if (!ArePuzzlesSolved()) continue;
+                Debug.Log("HERE");
+                
                 GameManager.Instance.StartCoroutine(GameManager.Instance.EventManager.RunEvents(gameEvents));
                 yield break;
             }
-
-            
         }
 
         private bool ArePuzzlesSolved()

@@ -1,20 +1,18 @@
-﻿using UnityEngine;
-using System.Collections;
+﻿using System.Collections;
+using UnityEngine;
 
 namespace Animation
 {
-
-
     public class CameraScreamer : MonoBehaviour
     {
         public Vector3 zoomTargetPosition; // куда приблизиться
-        private Vector3 originalPosition;
         public float zoomDuration = 0.5f; // плавное приближение за 0.5 сек
-        public float holdDuration = 2f;   // подержать 2 секунды
+        public float holdDuration = 2f; // подержать 2 секунды
 
-        private bool isZooming = false;
+        private bool isZooming;
+        private Vector3 originalPosition;
 
-        void Start()
+        private void Start()
         {
             originalPosition = transform.position;
         }
@@ -25,12 +23,12 @@ namespace Animation
                 StartCoroutine(ZoomInAndSnapBack());
         }
 
-        IEnumerator ZoomInAndSnapBack()
+        private IEnumerator ZoomInAndSnapBack()
         {
             isZooming = true;
 
             // Плавное приближение
-            float elapsed = 0f;
+            var elapsed = 0f;
             while (elapsed < zoomDuration)
             {
                 transform.position = Vector3.Lerp(originalPosition, zoomTargetPosition, elapsed / zoomDuration);
@@ -49,5 +47,4 @@ namespace Animation
             isZooming = false;
         }
     }
-
 }

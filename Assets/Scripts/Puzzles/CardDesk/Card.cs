@@ -5,10 +5,10 @@ using UnityEngine.EventSystems;
 
 namespace Puzzles.CardDesk
 {
-    public class Card: MonoBehaviour, IPointerDownHandler
+    public class Card : MonoBehaviour, IPointerDownHandler
     {
-        [NonSerialized] public bool IsClicked = false;
-        [NonSerialized] public bool isTurned = false;
+        [NonSerialized] public bool IsClicked;
+        [NonSerialized] public bool isTurned;
 
         [NonSerialized] public SpriteRenderer SpriteRenderer;
 

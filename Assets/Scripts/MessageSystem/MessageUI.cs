@@ -18,13 +18,9 @@ namespace MessageSystem
             if (speecher != null)
             {
                 if (name != null)
-                {
                     speecher.text = name;
-                }
                 else
-                {
                     speecher.text = "";
-                }
             }
 
             if (message == "")
@@ -32,21 +28,16 @@ namespace MessageSystem
                 HidePanel();
                 yield break;
             }
-            else
-            {
-                speechText.text = message.Replace("\\n", "\n");
-                ShowPanel();
-                yield return (CustomAnimation.Fade(speechText, false, fadeSpeed));
-            }
+
+            speechText.text = message.Replace("\\n", "\n");
+            ShowPanel();
+            yield return CustomAnimation.Fade(speechText, false, fadeSpeed);
         }
-        
+
         public IEnumerator HideMessage()
         {
             yield return CustomAnimation.Fade(speechText, true, fadeSpeed);
-            if (speecher != null)
-            {
-                speecher.text = "";
-            }
+            if (speecher != null) speecher.text = "";
             speechText.text = "Nothing";
         }
 
@@ -54,7 +45,7 @@ namespace MessageSystem
         {
             speechPanel.SetActive(false);
         }
-        
+
         public void ShowPanel()
         {
             speechPanel.SetActive(true);

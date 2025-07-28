@@ -3,10 +3,10 @@ using UnityEngine;
 
 namespace EventActions
 {
-    public class MakeAnimationEA: EventAction
+    public class MakeAnimationEA : EventAction
     {
-        [SerializeField] private Animator animator;
         private static readonly int Property = Animator.StringToHash("trigger");
+        [SerializeField] private Animator animator;
 
         public override IEnumerator ActionCoroutine()
         {
@@ -14,10 +14,5 @@ namespace EventActions
             animator.SetTrigger(Property);
             yield break;
         }
-
-
-
-
-
     }
 }

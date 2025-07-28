@@ -1,5 +1,4 @@
-﻿using GameEvent;
-using Inventory;
+﻿using Inventory;
 using UnityEngine;
 using UnityEngine.EventSystems;
 
@@ -11,12 +10,12 @@ namespace EventTrigger
 
         public void OnPointerClick(PointerEventData eventData)
         {
-            if (GameManager.Instance.GameStateManager.GameState == GameState.UsingItem && GameManager.Instance.InventoryManager.GetSelectedItem() == requiredItem)
+            if (GameManager.Instance.GameStateManager.GameState == GameState.UsingItem &&
+                GameManager.Instance.InventoryManager.GetSelectedItem() == requiredItem)
             {
-                GameManager.Instance.StartCoroutine(GameManager.Instance.EventManager.RunEvents(gameEvents)); ;
+                GameManager.Instance.StartCoroutine(GameManager.Instance.EventManager.RunEvents(gameEvents));
+                ;
             }
-
         }
-
     }
 }

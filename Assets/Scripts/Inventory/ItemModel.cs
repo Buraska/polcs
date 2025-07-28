@@ -9,6 +9,5 @@ namespace Inventory
         public string id;
 
         public Sprite sprite;
-
     }
 }

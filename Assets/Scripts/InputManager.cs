@@ -11,15 +11,12 @@ public class InputManager : MonoBehaviour
         _camera = Camera.main;
     }
 
-    void Update()
+    private void Update()
     {
         if (Input.GetMouseButtonDown(0))
         {
-            Ray ray = _camera.ScreenPointToRay(Input.mousePosition);
-            if (Physics.Raycast(ray, out RaycastHit hit))
-            {
-                Debug.Log("Привет, Unity!");
-            }
+            var ray = _camera.ScreenPointToRay(Input.mousePosition);
+            if (Physics.Raycast(ray, out var hit)) Debug.Log("Привет, Unity!");
         }
     }
 }

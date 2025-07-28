@@ -3,7 +3,7 @@ using UnityEngine;
 
 namespace EventActions
 {
-    public class WaitForClickEA: EventAction
+    public class WaitForClickEA : EventAction
     {
         public override IEnumerator ActionCoroutine()
         {

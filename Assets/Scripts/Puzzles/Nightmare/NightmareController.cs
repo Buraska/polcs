@@ -2,16 +2,16 @@
 
 namespace Puzzles.Nightmare
 {
-    public class NightmareController: MonoBehaviour
+    public class NightmareController : MonoBehaviour
     {
-        private int zoomStep = 0;
+        private int zoomStep;
 
         public int ZoomIn()
         {
             zoomStep++;
             return zoomStep;
         }
-        
+
         public int ZoomOut()
         {
             zoomStep++;

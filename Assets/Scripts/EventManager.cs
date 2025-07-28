@@ -2,21 +2,19 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
-using EventActions;
 using UnityEngine;
-using GameEvent;
 
 public class EventManager : MonoBehaviour
 {
-    [SerializeField] private EventEntry[] _eventStorage; 
+    [SerializeField] private EventEntry[] _eventStorage;
 
-    private List<GameEvent.GameEvent> _events = new();
-    private List<Coroutine> _runningCoroutines = new List<Coroutine>();
+    private readonly List<GameEvent.GameEvent> _events = new();
+    private readonly List<Coroutine> _runningCoroutines = new();
 
     public void InvokeFromStorage(string id)
     {
         var gEvent = _eventStorage.FirstOrDefault(x => x.id == id)?.gameEvent;
-        if(gEvent != null)
+        if (gEvent != null)
         {
             Debug.Log(id);
             StartCoroutine(RunEvent(gEvent));
@@ -30,31 +28,30 @@ public class EventManager : MonoBehaviour
     public bool EventsExist(GameEvent.GameEvent[] events)
     {
         return events.Any(EventExists);
-    } 
+    }
 
-    public bool EventExists(GameEvent.GameEvent e) => _events.Any(x => x.EventName== e.EventName);
+    public bool EventExists(GameEvent.GameEvent e)
+    {
+        return _events.Any(x => x.EventName == e.EventName);
+    }
 
-    public void AddEvent(GameEvent.GameEvent gEvent) => _events.Add(gEvent);
+    public void AddEvent(GameEvent.GameEvent gEvent)
+    {
+        _events.Add(gEvent);
+    }
 
 
     public bool isEventRunning()
     {
-        if (_runningCoroutines.Count != 0)
-        {
-            Debug.Log($"Cannot run Event. Event count is {_runningCoroutines.Count}");
-            
-        }
+        if (_runningCoroutines.Count != 0) Debug.Log($"Cannot run Event. Event count is {_runningCoroutines.Count}");
         return _runningCoroutines.Count != 0;
     }
 
     public void UnBlockUI()
     {
-        if (!isEventRunning())
-        {
-            GameManager.Instance.UIBlocker.Unblock();
-        }
+        if (!isEventRunning()) GameManager.Instance.UIBlocker.Unblock();
     }
-    
+
     public void BlockUI()
     {
         GameManager.Instance.UIBlocker.Unblock();
@@ -75,10 +72,8 @@ public class EventManager : MonoBehaviour
                 var currentCoroutine = StartCoroutine(action.ActionCoroutine());
                 tempCurrentCoroutines.Add(currentCoroutine);
             }
-            foreach (var coroutine in tempCurrentCoroutines)
-            {
-                yield return coroutine;
-            }
+
+            foreach (var coroutine in tempCurrentCoroutines) yield return coroutine;
             tempCurrentCoroutines.Clear();
         }
         else
@@ -89,7 +84,7 @@ public class EventManager : MonoBehaviour
                 _runningCoroutines.Add(currentCoroutine);
                 yield return currentCoroutine;
                 _runningCoroutines.Remove(currentCoroutine);
-            }          
+            }
         }
 
         UnBlockUI();
@@ -102,7 +97,7 @@ public class EventManager : MonoBehaviour
         Debug.Log("Start running events");
         foreach (var gEvent in gameEvents)
         {
-            if (gEvent == null) { continue; }
+            if (gEvent == null) continue;
 
             if (!CanBeRun(gEvent))
             {
@@ -113,33 +108,22 @@ public class EventManager : MonoBehaviour
             yield return RunEvent(gEvent);
         }
     }
-    
+
     public bool CanBeRun(GameEvent.GameEvent gEvent)
     {
-        if (!gEvent.CanBeRunCustom())
-        {
-            return false;
-        }
+        if (!gEvent.CanBeRunCustom()) return false;
 
-        if (gEvent.requiredEvents.Length != 0 && !gEvent.requiredEvents.All(x => _events.Contains(x)))
-        {
-            return false;
-        }
+        if (gEvent.requiredEvents.Length != 0 && !gEvent.requiredEvents.All(x => _events.Contains(x))) return false;
 
-        if (gEvent.forbiddenEvents.Length != 0 && gEvent.forbiddenEvents.Any(x => _events.Contains(x)))
-        {
-            return false;
-        }
+        if (gEvent.forbiddenEvents.Length != 0 && gEvent.forbiddenEvents.Any(x => _events.Contains(x))) return false;
 
         return true;
     }
-    
-    [System.Serializable]
+
+    [Serializable]
     public class EventEntry
     {
         public string id;
         public GameEvent.GameEvent gameEvent;
     }
-
-    
 }

@@ -1,6 +1,4 @@
 ﻿using System.Collections;
-using System.Collections.Generic;
-using SceneSystem;
 using UnityEngine;
 
 namespace EventActions
@@ -12,7 +10,7 @@ namespace EventActions
 
         public override IEnumerator ActionCoroutine()
         {
-            yield return (GameManager.Instance.SceneTransitionManager.DisableSpriteCoroutine(spriteRenderer, fadeSpeed));
+            yield return GameManager.Instance.SceneTransitionManager.DisableSpriteCoroutine(spriteRenderer, fadeSpeed);
         }
     }
 }
