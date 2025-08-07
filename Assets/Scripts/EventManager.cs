@@ -54,7 +54,14 @@ public class EventManager : MonoBehaviour
 
     public void BlockUI()
     {
-        GameManager.Instance.UIBlocker.Unblock();
+        GameManager.Instance.UIBlocker.Block();
+    }
+
+    public IEnumerator RunAction(IEnumerator action)
+    {
+        BlockUI();
+        yield return action;
+        UnBlockUI();
     }
 
     public IEnumerator RunEvent(GameEvent.GameEvent gEvent)

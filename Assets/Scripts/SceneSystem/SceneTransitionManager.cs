@@ -21,7 +21,17 @@ namespace SceneSystem
 
         public IEnumerator DisableObjectCoroutine(GameObject obj, int fadeSpeed = 8)
         {
-            yield return CustomAnimation.FadeImage(obj.transform.GetComponent<SpriteRenderer>(), true, fadeSpeed);
+            var spriteRenderer = obj.transform.GetComponent<SpriteRenderer>();
+            var image = obj.transform.GetComponent<Image>();
+
+            if (spriteRenderer != null)
+            {
+                yield return CustomAnimation.FadeImage(spriteRenderer, true, fadeSpeed);
+            }
+            else
+            {
+                yield return CustomAnimation.FadeImage(image, true, fadeSpeed);
+            }
             obj.SetActive(false);
         }
 
@@ -34,8 +44,17 @@ namespace SceneSystem
         public IEnumerator EnableObjectCoroutine(GameObject obj, int fadeSpeed = 8)
         {
             obj.SetActive(true);
-            yield return CustomAnimation.FadeImage(obj.transform.GetComponent<SpriteRenderer>(), false, fadeSpeed);
-        }
+            var spriteRenderer = obj.transform.GetComponent<SpriteRenderer>();
+            var image = obj.transform.GetComponent<Image>();
+
+            if (spriteRenderer != null)
+            {
+                yield return CustomAnimation.FadeImage(spriteRenderer, false, fadeSpeed);
+            }
+            else
+            {
+                yield return CustomAnimation.FadeImage(image, false, fadeSpeed);
+            }        }
 
 
         public IEnumerator TransitionToSceneCoroutine(int sceneNum, int speed = 8)

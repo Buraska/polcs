@@ -1,3 +1,4 @@
+using DigitalRuby.SoundManagerNamespace.MySoundManager;
 using Inventory;
 using JetBrains.Annotations;
 using MessageSystem;
@@ -19,6 +20,8 @@ public class GameManager : MonoBehaviour
     [SerializeField] public MessageManager MessageManager;
 
     public GameStateManager GameStateManager { get; private set; }
+
+    public AudioManager AudioManager;
 
 
     public void Awake()

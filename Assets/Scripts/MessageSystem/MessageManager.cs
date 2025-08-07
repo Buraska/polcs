@@ -88,7 +88,7 @@ namespace MessageSystem
         public IEnumerator DisplayScriptUnit(SayMessageNameObj scriptUnit)
         {
             Debug.Log($"Displaying {scriptUnit.Message}");
-            if (scriptUnit.eventTriggerId.Trim() != "")
+            if (!string.IsNullOrWhiteSpace(scriptUnit.eventTriggerId))
                 GameManager.Instance.EventManager.InvokeFromStorage(scriptUnit.eventTriggerId);
 
             if (scriptUnit.choices.Length > 0)

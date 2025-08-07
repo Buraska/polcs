@@ -1,10 +1,9 @@
-﻿блядская бутыка в подвале
-блятский 
-
-
+﻿
 *Музыка
-Шум во время разговора с братом во всю сцену
 
+*Refactor
+AudioManager Ambient
+EventManager - automatic event creation
 
 *Альфа релиз
 * Сделай сценарий на одной страничке
@@ -14,3 +13,4 @@
 * Мб вступительный слайд для ознакомления
 
 
+* Укзать Sound effects obtained from https://www.zapsplat.com

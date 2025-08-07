@@ -11,10 +11,12 @@ namespace Puzzles.CounterLock
 
         [SerializeField] private int currentNumber;
 
+        [SerializeField] private AudioSource clickSound;
+
         private void Awake()
         {
             _text = gameObject.GetComponentInChildren(typeof(TextMeshProUGUI)) as TextMeshProUGUI;
-            UpdateNum();
+            _text.text = currentNumber.ToString();
         }
 
         public override bool IsSolved()
@@ -38,7 +40,10 @@ namespace Puzzles.CounterLock
 
         private void UpdateNum()
         {
+            clickSound.Play();
             _text.text = currentNumber.ToString();
         }
+        
+
     }
 }
