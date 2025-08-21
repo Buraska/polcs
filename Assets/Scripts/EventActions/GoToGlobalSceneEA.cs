@@ -11,7 +11,7 @@ namespace EventActions
 
         public override IEnumerator ActionCoroutine()
         {
-            yield return GameManager.Instance.SceneTransitionManager.StartTransition(GameConstants.GlobalSceneTransitionSpeed);
+            yield return GameManager.Instance.SceneTransitionManager.StartTransition(GameConstants.GlobalSceneTransitionTime);
             SceneManager.LoadScene(changeSceneNum);
             yield return
                 new WaitForSeconds(

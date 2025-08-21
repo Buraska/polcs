@@ -1,5 +1,8 @@
 ﻿using System.Collections;
+using EventActions.utils;
+using JetBrains.Annotations;
 using UnityEngine;
+using UnityEngine.Serialization;
 
 namespace EventActions
 {
@@ -7,7 +10,7 @@ namespace EventActions
     {
         [SerializeField] private Scene oldScene;
         [SerializeField] private Scene newScene;
-        [SerializeField] private int speed = 8;
+        [SerializeField] [CanBeNull] private TimeHolder time;
 
         private void Awake()
         {
@@ -17,7 +20,12 @@ namespace EventActions
 
         public override IEnumerator ActionCoroutine()
         {
-            yield return GameManager.Instance.SceneTransitionManager.ChangeSceneToCoroutine(oldScene, newScene, speed);
+            if (time == null)
+            {
+                time = new TimeHolder();
+                time.time = 0.17f;
+            }
+            yield return GameManager.Instance.SceneTransitionManager.ChangeSceneToCoroutine(oldScene, newScene, time.time);
         }
     }
 }

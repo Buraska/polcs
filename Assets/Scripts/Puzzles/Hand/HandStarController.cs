@@ -19,19 +19,19 @@ namespace Puzzles.Hand
         {
             if (value == isSeparated) return;
             isSeparated = value;
-            StartCoroutine(enableStar(value));
+            StartCoroutine(EnableStar(value));
         }
 
-        public IEnumerator enableStar(bool value)
+        public IEnumerator EnableStar(bool value)
         {
             if (value)
             {
                 starSprite.enabled = value;
-                yield return CustomAnimation.FadeImage(starSprite, !value, 2);
+                yield return CustomAnimation.FadeImage(starSprite, !value, 1);
             }
             else
             {
-                yield return CustomAnimation.FadeImage(starSprite, !value, 2);
+                yield return CustomAnimation.FadeImage(starSprite, !value, 1);
                 starSprite.enabled = value;
             }
         }

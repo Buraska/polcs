@@ -15,20 +15,24 @@ namespace MessageSystem
 
         public IEnumerator ShowMessage(string message, string name = null)
         {
-            if (speecher != null)
-            {
-                if (name != null)
-                    speecher.text = name;
-                else
-                    speecher.text = "";
-            }
-
             if (message == "")
             {
                 HidePanel();
                 yield break;
             }
-
+            
+            if (speecher != null)
+            {
+                if (name != null)
+                    speecher.text = name;
+                else
+                {
+                    speecher.text = "";
+                    message = $"<i>{message}</i>";
+                    
+                }
+            }
+            
             speechText.text = message.Replace("\\n", "\n");
             ShowPanel();
             yield return CustomAnimation.Fade(speechText, false, fadeSpeed);

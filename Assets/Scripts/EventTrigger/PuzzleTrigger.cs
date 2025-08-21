@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using System.Linq;
+using JetBrains.Annotations;
 using Puzzles;
 using UnityEngine;
 
@@ -9,6 +10,7 @@ namespace EventTrigger
     {
         [SerializeField] private BasePuzzleElement[] _puzzleElements;
         [SerializeField] private int waitWhenSolved = 3;
+        [SerializeField] [CanBeNull] private AudioSource solvingSound;
 
 
         private void Start()
@@ -25,8 +27,11 @@ namespace EventTrigger
                 yield return new WaitForSecondsRealtime(waitWhenSolved);
 
                 if (!ArePuzzlesSolved()) continue;
-                Debug.Log("HERE");
-                
+                Debug.Log("Puzzle solved");
+                if (solvingSound != null)
+                {
+                    solvingSound.Play();
+                }
                 GameManager.Instance.StartCoroutine(GameManager.Instance.EventManager.RunEvents(gameEvents));
                 yield break;
             }

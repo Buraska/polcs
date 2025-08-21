@@ -7,7 +7,7 @@ namespace EventActions
     {
         public override IEnumerator ActionCoroutine()
         {
-            yield return new WaitUntil(() => Input.GetKeyUp(KeyCode.Mouse0));
+            yield return new WaitUntil(() => Input.GetKeyUp(KeyCode.Mouse0) || Input.GetKeyUp(KeyCode.Space) || Input.GetKeyUp(KeyCode.RightArrow));
         }
     }
 }

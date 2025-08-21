@@ -63,16 +63,12 @@ namespace MessageSystem
         private IEnumerator DisplayMessage(string message, string name = null)
         {
             yield return ui.ShowMessage(message, name);
-            yield return new WaitUntil(() => !Input.GetKey(KeyCode.Mouse0));
-            yield return new WaitUntil(() => Input.GetKeyDown(KeyCode.Mouse0));
+            yield return new WaitUntil(() => !Input.GetKey(KeyCode.Mouse0) ||  !Input.GetKey(KeyCode.Space) ||  !Input.GetKey(KeyCode.RightArrow));
+            yield return new WaitUntil(() => Input.GetKeyDown(KeyCode.Mouse0) || Input.GetKeyDown(KeyCode.Space) || Input.GetKeyDown(KeyCode.RightArrow));
             Debug.Log($"Stops DisplayMessage({message})");
             yield return ui.HideMessage();
         }
-
-        private IEnumerator DisplayMessages(string[] messages)
-        {
-            foreach (var message in messages) yield return DisplayMessage(message);
-        }
+        
 
         public IEnumerator DisplayScript(DialogScript script)
         {

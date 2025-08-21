@@ -1,5 +1,6 @@
 using System;
 using System.Collections;
+using JetBrains.Annotations;
 using Puzzles;
 using UnityEngine;
 using UnityEngine.EventSystems;
@@ -8,6 +9,8 @@ public class KnobController : BasePuzzleElement, IPointerDownHandler
 {
     private const float Tolerance = 0.05f;
     public float keyValue;
+    
+    [CanBeNull] public KnobController connectedKnob;
     private Quaternion _difference;
     private Quaternion _newPos;
     private Quaternion _previousLocation;
@@ -32,6 +35,10 @@ public class KnobController : BasePuzzleElement, IPointerDownHandler
         var newPosition = GetRotation();
         _difference = newPosition * Quaternion.Inverse(_previousLocation);
         GameManager.Instance.StartCoroutine(GetPositionCoroutine());
+        if (connectedKnob != null)
+        {
+            connectedKnob.OnPointerDown(eventData);
+        }
     }
 
     public override bool IsSolved()

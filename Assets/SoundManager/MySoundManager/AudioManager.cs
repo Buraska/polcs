@@ -9,6 +9,8 @@ namespace DigitalRuby.SoundManagerNamespace.MySoundManager
     {
 
         [FormerlySerializedAs("SoundDTOs")] public AudioSource[] Audios;
+
+        private AudioSource currentSource;
         
         private void PlayMusic(int index)
         {
@@ -44,18 +46,26 @@ namespace DigitalRuby.SoundManagerNamespace.MySoundManager
         }
         
                 
-        public void PlayAmbient(string name)
+        public void PlayAmbient(AudioSource audioSource, AudioSource[] additionalAudioSources, float fadeSeconds = 1.0f)
         {
-            var sound = Audios.FirstOrDefault(x => x.name == name);
-            if (sound != null)
+            var sound = Audios.FirstOrDefault(x => x == audioSource);
+            if (sound == null)
             {
-                Debug.LogWarning($"Playing sound with name '{name}'.");
-                sound.PlayLoopingMusicManaged(0.15f, 1.0f, false);
+                Debug.LogWarning($"Sound with name '{audioSource}' not found. Adding Ambient into library");
+                Audios.Append(audioSource);
             }
-            else
+
+            if (currentSource != audioSource)
             {
-                Debug.LogWarning($"Sound with name '{name}' not found.");
-            }        
+                audioSource.PlayLoopingMusicManaged(0.15f, fadeSeconds, false);
+                currentSource = audioSource;
+            }
+
+            if (additionalAudioSources == null) return;
+            foreach (var source in additionalAudioSources)
+            {
+                source.PlayLoopingMusicManaged(0.15f, fadeSeconds, false, false);
+            }
         }
     }
 

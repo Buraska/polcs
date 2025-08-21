@@ -15,7 +15,7 @@ public class GameManager : MonoBehaviour
     public UIBlocker UIBlocker { get; private set; }
     public SceneTransitionManager SceneTransitionManager { get; private set; }
 
-    [SerializeField] public InventoryManager InventoryManager;
+    [SerializeField] [CanBeNull] public InventoryManager InventoryManager;
 
     [SerializeField] public MessageManager MessageManager;
 

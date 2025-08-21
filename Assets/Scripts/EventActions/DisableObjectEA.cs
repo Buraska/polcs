@@ -1,4 +1,7 @@
 ﻿using System.Collections;
+using DefaultNamespace;
+using EventActions.utils;
+using JetBrains.Annotations;
 using UnityEngine;
 
 namespace EventActions
@@ -6,11 +9,16 @@ namespace EventActions
     public class DisableObjectEA : EventAction
     {
         [SerializeField] private GameObject objectToDisable;
-        [SerializeField] private int fadeSpeed = 8;
+        [SerializeField] [CanBeNull] private TimeHolder fadeSpeed;
 
         public override IEnumerator ActionCoroutine()
         {
-            yield return GameManager.Instance.SceneTransitionManager.DisableObjectCoroutine(objectToDisable, fadeSpeed);
+            if (fadeSpeed == null)
+            {
+                fadeSpeed = new TimeHolder();
+                fadeSpeed.time = 0.2f;
+            }
+            yield return GameManager.Instance.SceneTransitionManager.DisableObjectCoroutine(objectToDisable, fadeSpeed.time);
         }
     }
 }

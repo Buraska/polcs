@@ -1,97 +1,59 @@
 ﻿using System.Collections;
+using DG.Tweening;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
 public static class CustomAnimation
 {
-    public static IEnumerator FadeImage(Image img, bool fadeIn, int speed = 8)
-
+    public static IEnumerator FadeImage(Image img, bool fadeIn, float duration = 0.125f)
     {
-        Debug.Log(img.isActiveAndEnabled);
-        // fade from opaque to transparent
-        var col = img.color;
-
-        if (fadeIn)
+        if (!img) yield break;
+        
+        Color col = img.color;
+        if (duration == 0f)
         {
-            if (speed == 0)
-            {
-                col.a = 0;
-                img.color = col;
-                yield break;
-            }
-            // loop over 1 second backwards
-            for (float i = 1; i >= 0; i -= Time.deltaTime * speed)
-            {
-                col.a = i;
-                img.color = col;
-                yield return null;
-            }
-
-            col.a = 0;
+            col.a = fadeIn ? 0f : 1f;
             img.color = col;
+            yield break;
         }
-        // fade from transparent to opaque
-        else
-        {
-            if (speed == 0)
-            {
-                col.a = 1;
-                img.color = col;
-                yield break;
-            }
-            // loop over 1 second
-            for (float i = 0; i <= 1; i += Time.deltaTime * speed)
-            {
-                col.a = i;
-                img.color = col;
-                yield return null;
-            }
+        
+        var targetAlpha = fadeIn ? 0f : 1f;
+        var startAlpha = !fadeIn ? 0f : 1f;
+        img.DOKill();
+        col.a = startAlpha;
+        img.color = col;
 
-            col.a = 1;
-            img.color = col;
-        }
+        Tween t = img.DOFade(targetAlpha,  duration)
+            .SetEase(Ease.Linear);
+
+        yield return t.WaitForCompletion();
     }
 
-    public static IEnumerator FadeImage(SpriteRenderer img, bool fadeIn, int speed = 8)
-        // Coef 0 - fades immediately
+    public static IEnumerator  FadeImage(SpriteRenderer img, bool fadeIn, float duration = 0.125f)
     {
-        var col = img.color;
+        if (!img) yield break;
 
-
-        if (fadeIn)
+        Color col = img.color;
+        if (duration == 0)
         {
-            if (speed == 0)
-            {
-                col.a = 0;
-                img.color = col;
-                yield break;
-            }
-
-            for (float i = 1; i >= 0; i -= Time.deltaTime * speed)
-            {
-                col.a = i;
-                img.color = col;
-                yield return null;
-            }
+            col.a = fadeIn ? 0f : 1f;
+            img.color = col;
+            yield break;
         }
-        else
-        {
-            if (speed == 0)
-            {
-                col.a = 1;
-                img.color = col;
-                yield break;
-            }
+        
+        var targetAlpha = fadeIn ? 0f : 1f;
+        var startAlpha = !fadeIn ? 0f : 1f;
+        img.DOKill();
+        col.a = startAlpha;
+        img.color = col;
 
-            for (float i = 0; i <= 1; i += Time.deltaTime * speed)
-            {
-                col.a = i;
-                img.color = col;
-                yield return null;
-            }
-        }
+        Tween t = img.DOFade(targetAlpha, duration)
+            .SetEase(Ease.Linear);
+
+        yield return t.WaitForCompletion();
     }
+
 
     public static IEnumerator Blinking(SpriteRenderer sprite, float fadeSpeed = 1f, float minTarget = 0.5f)
     {

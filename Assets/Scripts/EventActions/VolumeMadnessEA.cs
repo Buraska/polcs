@@ -1,5 +1,6 @@
 ﻿using System.Collections;
-using Animation;
+using Anime;
+using UnityEngine.Serialization;
 
 namespace EventActions
 {
@@ -7,19 +8,20 @@ namespace EventActions
     {
         public MadnessAnimation MadnessAnimation;
         public float increasingValue;
-        public float speed = 0.5f;
+        [FormerlySerializedAs("speed")] public float duration = 2f;
         public bool waitTheEnd = false;
+        public bool mute = false;
 
         public override IEnumerator ActionCoroutine()
         {
             if (increasingValue > 1) increasingValue /= 100;
             if (waitTheEnd)
             {
-                yield return MadnessAnimation.IncreaseVolumeTween(increasingValue, speed);
+                yield return MadnessAnimation.IncreaseVolumeTween(increasingValue, duration, mute);
             }
             else
             {
-                GameManager.Instance.StartCoroutine(MadnessAnimation.IncreaseVolumeTween(increasingValue, speed));
+                GameManager.Instance.StartCoroutine(MadnessAnimation.IncreaseVolumeTween(increasingValue, duration, mute));
             }
             yield break;
         }

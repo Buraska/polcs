@@ -9,6 +9,8 @@ namespace Puzzles.CardDesk
         [SerializeField] private CardAndEvent[] _cards;
         private int cardsTurned;
 
+        public AudioSource cardSound;
+
         private void Update()
         {
             foreach (var card in _cards)
@@ -17,8 +19,8 @@ namespace Puzzles.CardDesk
         }
 
         private IEnumerator _openCard(Card card)
-        {
-            //TODO BLOCK UI
+        { 
+            cardSound.Play();
             card.isTurned = true;
             yield return GameManager.Instance.EventManager.RunAction(card.openCard(_cards[cardsTurned].CardFace));
             
