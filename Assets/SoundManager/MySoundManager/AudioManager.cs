@@ -11,21 +11,10 @@ namespace DigitalRuby.SoundManagerNamespace.MySoundManager
         [FormerlySerializedAs("SoundDTOs")] public AudioSource[] Audios;
 
         private AudioSource currentSource;
-        
-        private void PlayMusic(int index)
-        {
-        }
 
-        public void PlaySound(string name, float volume)
-        {
-            var sound = GetSound(name);
-            sound.volume = volume;
-            if (sound != null)
-            {
-                sound.Play();
-            }
-        }
+        private const float VolumeScale = 0.15f;
         
+
         public void PlaySound(AudioSource audioSource, float volume)
         {
             audioSource.volume = volume;
@@ -57,14 +46,14 @@ namespace DigitalRuby.SoundManagerNamespace.MySoundManager
 
             if (currentSource != audioSource)
             {
-                audioSource.PlayLoopingMusicManaged(0.15f, fadeSeconds, false);
+                audioSource.PlayLoopingMusicManaged(VolumeScale, fadeSeconds, false);
                 currentSource = audioSource;
             }
 
             if (additionalAudioSources == null) return;
             foreach (var source in additionalAudioSources)
             {
-                source.PlayLoopingMusicManaged(0.15f, fadeSeconds, false, false);
+                source.PlayLoopingMusicManaged(VolumeScale, fadeSeconds, false, false);
             }
         }
     }

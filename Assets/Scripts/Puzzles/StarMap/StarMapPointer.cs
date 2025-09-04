@@ -1,4 +1,6 @@
-﻿using UnityEngine;
+﻿using System;
+using System.Linq;
+using UnityEngine;
 
 namespace Puzzles.StarMap
 {
@@ -7,8 +9,18 @@ namespace Puzzles.StarMap
         [SerializeField] private Arrow _x;
         [SerializeField] private Arrow _y;
 
-        private readonly float[] _xLocs = { -4.59f, -3f, -1.45f, 0.2f, 1.86f, 3.45f, 5.07f };
-        private readonly float[] _yLocs = { 3f, 1.92f, 1f, -0.14f, -1.11f, -2.14f, -3.15f }; // 3, 1.92, 
+        [SerializeField] private GameObject XLocs;
+        [SerializeField] private GameObject YLocs;
+
+        private float[] _xLocs ;
+        private float[] _yLocs; // 3, 1.92, 
+
+        private void Start()
+        {
+            _xLocs = XLocs.GetComponentsInChildren<Transform>().Skip(1).Select(x => x.transform.localPosition.x).ToArray();
+            _yLocs = YLocs.GetComponentsInChildren<Transform>().Skip(1).Select(y => y.transform.localPosition.y).ToArray();
+            Debug.Log($"X positions are {string.Join(", ",_xLocs)}");
+        }
 
         private void Update()
         {

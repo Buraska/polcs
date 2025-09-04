@@ -19,6 +19,16 @@ namespace SceneSystem
             GameManager.Instance.StartCoroutine(EndTransition(GameConstants.GlobalSceneTransitionTime));
         }
 
+        public void SetCurrentSceneNumber(int sceneNum)
+        {
+            if (sceneNum <= localScenes.Length - 1)
+            {
+                currentSceneNumber = sceneNum;
+            }
+
+            Debug.LogError($"Cannot set scene with number {sceneNum}. The index does not exist.");
+        }
+
         public IEnumerator DisableObjectCoroutine(GameObject obj, float fadeDuration = 1)
         {
             var spriteRenderer = obj.transform.GetComponent<SpriteRenderer>();

@@ -17,14 +17,15 @@ public static class CustomAnimation
             img.color = col;
             yield break;
         }
+
+        img.DOKill(true);
         
         var targetAlpha = fadeIn ? 0f : 1f;
         var startAlpha = !fadeIn ? 0f : 1f;
-        img.DOKill();
         col.a = startAlpha;
         img.color = col;
 
-        Tween t = img.DOFade(targetAlpha,  duration)
+        Tween t = img.DOFade(targetAlpha, duration)
             .SetEase(Ease.Linear);
 
         yield return t.WaitForCompletion();

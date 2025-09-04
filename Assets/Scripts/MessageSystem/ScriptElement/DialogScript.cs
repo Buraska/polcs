@@ -1,4 +1,5 @@
 ﻿using System;
+using JetBrains.Annotations;
 using UnityEngine;
 using UnityEngine.Serialization;
 
@@ -15,7 +16,7 @@ namespace MessageSystem.ScriptElement
     {
         public CharacterScript CharacterScript;
         public string Message;
-        public Choice[] choices;
+        [CanBeNull] public Choice[] choices;
         public string eventTriggerId;
     }
 

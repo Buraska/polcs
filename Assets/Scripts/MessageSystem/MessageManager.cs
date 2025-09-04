@@ -1,57 +1,31 @@
 using System.Collections;
+using System.Collections.Generic;
+using System.Linq;
+using JetBrains.Annotations;
 using MessageSystem.ScriptElement;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
+using Utils;
 
 namespace MessageSystem
 {
     public class MessageManager : MonoBehaviour
     {
         [SerializeField] private MessageUI ui;
-        [SerializeField] private GridLayoutGroup choiceHolder;
         [SerializeField] private Button choiceButtonPrefab;
+        [SerializeField] private ChoiceHolder choiceHolder;
 
+        private Stack<DialogScript> runningScripts = new Stack<DialogScript>();
         private Coroutine _chosenScript;
         private bool isWaitingForChoice;
-
-        private Button CreateChoiceButton(Choice choice)
-        {
-            var choiceButton = Instantiate(choiceButtonPrefab);
-            var buttonText = choiceButton.GetComponentInChildren<TextMeshProUGUI>();
-            choiceButton.transform.SetParent(choiceHolder.transform, false);
-            buttonText.text = choice.choiceText;
-            choiceButton.onClick.AddListener(() => OnClickChoiceButton(choice));
-            return choiceButton;
-        }
-
-        private void OnClickChoiceButton(Choice choice)
-        {
-            Debug.Log("Choice button is pressed");
-            _chosenScript = StartCoroutine(DisplayScript(choice.script));
-            RefreshChoiceView();
-            isWaitingForChoice = false;
-        }
-
-        private void RefreshChoiceView()
-        {
-            if (choiceHolder != null)
-                foreach (var button in choiceHolder.GetComponentsInChildren<Button>())
-                    Destroy(button.gameObject);
-        }
 
 
         private IEnumerator DisplayChoices(Choice[] choices)
         {
-            isWaitingForChoice = true;
-            if (choiceHolder.GetComponentsInChildren<Button>().Length > 0) yield break;
-            foreach (var choice in choices)
-            {
-                var button = CreateChoiceButton(choice);
-            }
+            choiceHolder.DisplayChoices(choices);
 
-            yield return new WaitUntil(() => !isWaitingForChoice);
-            yield return _chosenScript;
+            yield return new WaitUntil(() => !choiceHolder.isWaitingForChoice);
         }
 
         public void SetMessageUi(MessageUI messageUI)
@@ -63,31 +37,78 @@ namespace MessageSystem
         private IEnumerator DisplayMessage(string message, string name = null)
         {
             yield return ui.ShowMessage(message, name);
-            yield return new WaitUntil(() => !Input.GetKey(KeyCode.Mouse0) ||  !Input.GetKey(KeyCode.Space) ||  !Input.GetKey(KeyCode.RightArrow));
-            yield return new WaitUntil(() => Input.GetKeyDown(KeyCode.Mouse0) || Input.GetKeyDown(KeyCode.Space) || Input.GetKeyDown(KeyCode.RightArrow));
+            yield return new WaitUntil(() =>
+                !Input.GetKey(KeyCode.Mouse0) || !Input.GetKey(KeyCode.Space) || !Input.GetKey(KeyCode.RightArrow));
+            yield return new WaitUntil(() =>
+                Input.GetKeyDown(KeyCode.Mouse0) || Input.GetKeyDown(KeyCode.Space) ||
+                Input.GetKeyDown(KeyCode.RightArrow));
             Debug.Log($"Stops DisplayMessage({message})");
             yield return ui.HideMessage();
         }
+
+
+        public IEnumerator DisplayScript(DialogScript script, [CanBeNull] OmgTalkingSprite[] sprites = null)
+        {
+            MyUtils.Log($"Start Displaying script: {script.scriptUnit[0].Message}...");
+            runningScripts.Push(script);
+
+            try
+            {
+                foreach (var unit in script.scriptUnit)
+                {
+                    yield return HandleScriptUnit(unit, sprites);
+                    yield return new WaitUntil(() => runningScripts.Peek() == script);
+                }
+            }
+            finally
+            {
+                if (runningScripts.TryPop(out DialogScript lastScript) && lastScript != script)
+                    Debug.LogError("DisplayScript Error. The deleted dialogScript is not the same that was started.");
         
-
-        public IEnumerator DisplayScript(DialogScript script)
+                ui.HidePanel();
+                MyUtils.Log($"Stop Displaying script: {script.scriptUnit[0].Message}...");
+            }
+        }
+        public IEnumerator DisplayScript(SayMessageNameObj[] scriptObjects, OmgTalkingSprite[] sprites = null)
         {
-            yield return DisplayScript(script.scriptUnit);
+            var dialogScript = ScriptableObject.CreateInstance<DialogScript>();
+            dialogScript.scriptUnit = scriptObjects;
+            yield return DisplayScript(dialogScript, sprites);
         }
 
-        public IEnumerator DisplayScript(SayMessageNameObj[] scriptObjects)
+
+        private IEnumerator HandleScriptUnit(SayMessageNameObj unit, OmgTalkingSprite[] sprites)
         {
-            foreach (var scriptUnit in scriptObjects) yield return DisplayScriptUnit(scriptUnit);
-            ui.HidePanel();
+            if (sprites == null)
+            {
+                yield return DisplayScriptUnit(unit);
+                yield break;
+            }
+
+            var character = unit.CharacterScript;
+            var sprite = sprites.FirstOrDefault(s => s.name == character?.name);
+
+            if (sprite == null)
+            {
+                Debug.Log($"Cannot find sprite with name: {character?.name}");
+                yield return DisplayScriptUnit(unit);
+            }
+            else
+            {
+                sprite.SpriteSpeaks();
+                yield return DisplayScriptUnit(unit);
+                sprite.SpriteListens();
+            }
         }
 
-        public IEnumerator DisplayScriptUnit(SayMessageNameObj scriptUnit)
+
+        private IEnumerator DisplayScriptUnit(SayMessageNameObj scriptUnit)
         {
             Debug.Log($"Displaying {scriptUnit.Message}");
             if (!string.IsNullOrWhiteSpace(scriptUnit.eventTriggerId))
                 GameManager.Instance.EventManager.InvokeFromStorage(scriptUnit.eventTriggerId);
 
-            if (scriptUnit.choices.Length > 0)
+            if (scriptUnit.choices is { Length: > 0 })
             {
                 ui.HidePanel();
                 yield return DisplayChoices(scriptUnit.choices);
@@ -102,8 +123,6 @@ namespace MessageSystem
                 Debug.Log($"Displaying {scriptUnit.Message}");
                 yield return DisplayMessage(scriptUnit.Message, scriptUnit.CharacterScript.name);
             }
-
-            ui.HidePanel();
         }
     }
 }

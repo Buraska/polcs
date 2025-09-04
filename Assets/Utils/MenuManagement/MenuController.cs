@@ -1,8 +1,11 @@
 ﻿using System;
 using System.Collections;
+using DefaultNamespace;
 using JetBrains.Annotations;
 using UnityEngine;
+using UnityEngine.Audio;
 using UnityEngine.SceneManagement;
+using UnityEngine.Serialization;
 using UnityEngine.UI;
 
 namespace Utils.MenuManagement
@@ -18,21 +21,24 @@ namespace Utils.MenuManagement
 
         private MenuPage[] _menuPages;
 
+        [SerializeField] private SettingController SettingController;
+        
         private void Awake()
         {
+            SettingController.LoadVolume();
+            
             _menuPages = GetComponentsInChildren<MenuPage>(true);
             _currentMenuPage = _menuPages[0];
             foreach (var menuPage in _menuPages)
             {
-                Debug.Log("1");
                 menuPage.SetActive(false);
             }
             _currentMenuPage.SetActive(true);
         }
 
-        public void Play(int sceneNum)
+        public void ChangeScene(string sceneName)
         {
-            StartCoroutine(PlayCoroutine(sceneNum));
+            GlobalSceneManager.Instance.LoadScene(sceneName);
         }
 
         public void Exit()
@@ -40,12 +46,6 @@ namespace Utils.MenuManagement
             Application.Quit();
         }
         
-        private IEnumerator PlayCoroutine(int sceneNum)
-        {
-            SceneBlocker.enabled = true;
-            yield return (CustomAnimation.FadeImage(SceneBlocker, false, 1f));
-            SceneManager.LoadScene(sceneNum);
-        }
 
         public void OpenSupportPage()
         {
@@ -58,6 +58,8 @@ namespace Utils.MenuManagement
             menuPage.SetActive(true);
             _currentMenuPage = menuPage;
         }
+
+
         
     }
 }

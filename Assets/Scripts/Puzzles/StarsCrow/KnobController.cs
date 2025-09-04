@@ -14,11 +14,16 @@ public class KnobController : BasePuzzleElement, IPointerDownHandler
     private Quaternion _difference;
     private Quaternion _newPos;
     private Quaternion _previousLocation;
+    private Transform _tr;
+    private Camera _cam;
+
 
     [NonSerialized] public float CurrentValue;
 
     private void Awake()
     {
+        _cam = Camera.main;
+        _tr = transform;
         CurrentValue = 0;
         _newPos = Quaternion.identity;
         _previousLocation = Quaternion.identity;
@@ -26,8 +31,8 @@ public class KnobController : BasePuzzleElement, IPointerDownHandler
 
     private void Update()
     {
-        gameObject.transform.rotation = Quaternion.Slerp(gameObject.transform.rotation, _newPos, Time.deltaTime * 3);
-        CurrentValue = GetCurrentValue(gameObject.transform.rotation);
+        _tr.rotation = Quaternion.Lerp(_tr.rotation, _newPos, Time.deltaTime * 3);
+        CurrentValue = GetCurrentValue( _tr.rotation);
     }
 
     public void OnPointerDown(PointerEventData eventData)
@@ -65,7 +70,7 @@ public class KnobController : BasePuzzleElement, IPointerDownHandler
 
     private Quaternion GetRotation()
     {
-        var mousePos = Camera.main!.ScreenToWorldPoint(Input.mousePosition);
+        var mousePos = _cam.ScreenToWorldPoint(Input.mousePosition);
         var objectPos = gameObject.transform.position;
         var dir = mousePos - objectPos;
         var angle = Mathf.Atan2(dir.y, dir.x) * Mathf.Rad2Deg;

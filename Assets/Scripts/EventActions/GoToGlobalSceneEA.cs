@@ -7,15 +7,12 @@ namespace EventActions
 {
     public class GoToGlobalSceneEA : EventAction
     {
-        [SerializeField] private int changeSceneNum;
+        [SerializeField] private string sceneName;
 
         public override IEnumerator ActionCoroutine()
         {
-            yield return GameManager.Instance.SceneTransitionManager.StartTransition(GameConstants.GlobalSceneTransitionTime);
-            SceneManager.LoadScene(changeSceneNum);
-            yield return
-                new WaitForSeconds(
-                    1); // At the end of any event scene is unblocked. If you delete this line you will see splash. To solve this we need separate scene blocker for transitions and game events.  
+            GlobalSceneManager.Instance.LoadScene(sceneName);
+            yield break;  
         }
     }
 }

@@ -2,6 +2,7 @@
 using JetBrains.Annotations;
 using TMPro;
 using UnityEngine;
+using Utils;
 
 namespace MessageSystem
 {
@@ -47,11 +48,13 @@ namespace MessageSystem
 
         public void HidePanel()
         {
+            MyUtils.Log("Hide UI Panel");
             speechPanel.SetActive(false);
         }
 
         public void ShowPanel()
         {
+            MyUtils.Log("Hide UI Panel");
             speechPanel.SetActive(true);
         }
     }

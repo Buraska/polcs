@@ -2,11 +2,16 @@
 using System.Collections;
 using UnityEngine;
 using UnityEngine.EventSystems;
+using Utils;
 
 namespace Puzzles.StarMap
 {
     public class Arrow : BasePuzzleElement, IPointerDownHandler
     {
+        private const int PositionTolerance = 15;
+        private const int MinAllowedAngle = -93;
+        private const int MaxAllowedAngle = 75;
+        
         [SerializeField] public int CurrentPositionInd = 2;
         [SerializeField] private int _truePos;
         [SerializeField] private int[] _positions = { 60, 38, 12, -12, -38, -60, -90 };
@@ -16,25 +21,27 @@ namespace Puzzles.StarMap
         private Quaternion _previousLocation;
         private Quaternion _difference;
         [NonSerialized] public int CurrentValue;
+        private Transform _tr;
+        private Camera _cam;
+
 
         private int _transmission = 1;
 
         private void Awake()
         {
-            _newPos = gameObject.transform.rotation;
+            _cam = Camera.main;
+            _tr = transform;
+            _newPos = _tr.rotation;
             _previousLocation = _newPos;
         }
         
         private void Update()
         {
             var currentRotation = gameObject.transform.rotation;
-            gameObject.transform.rotation = Quaternion.Slerp(currentRotation, _newPos, Time.deltaTime * 3);
+            _tr.rotation = Quaternion.RotateTowards(currentRotation, _newPos, 180 * Time.deltaTime);
             var positionIndex = GetCurrentPositionIndex(currentRotation);
             if (positionIndex != CurrentPositionInd)
             {
-                Debug.Log("WTF");
-                Debug.Log(positionIndex);
-                Debug.Log(CurrentPositionInd);
                 _arrowSound.Play();
             }
             CurrentPositionInd = positionIndex;
@@ -52,18 +59,16 @@ namespace Puzzles.StarMap
 
         {
             var angle = GetAngle(q);
-            int tolerance = 14;
             
             for (int i = 0; i < _positions.Length; i++)
             {
                 var pos = _positions[i];
-                if (angle >= (pos - tolerance) && angle <= (pos + tolerance))
+                if (angle >= (pos - PositionTolerance) && angle <= (pos + PositionTolerance))
                 {
                     return i;
                 }
             }
-
-            Debug.Log("Cant find proper position.");
+            MyUtils.Log($"Cant find proper position. Position array is {string.Join(", ", _positions)}");
             return -1;
         }
 
@@ -82,7 +87,7 @@ namespace Puzzles.StarMap
                 currentPos =  newPosition * Quaternion.Inverse(_difference);
                 var curPos = GetAngle(currentPos);
 
-                if (curPos is < 75 and > -93)
+                if (curPos is < MaxAllowedAngle and > MinAllowedAngle)
                 {
                     _newPos = currentPos;
                 }
@@ -90,15 +95,6 @@ namespace Puzzles.StarMap
                 yield return null;
             }
             _previousLocation = _newPos;
-        }
-
-        private int Transmit()
-        {
-            if (CurrentPositionInd == 0)
-                _transmission = 1;
-            else if (CurrentPositionInd == _positions.Length - 1) _transmission = -1;
-            CurrentPositionInd += _transmission;
-            return CurrentPositionInd;
         }
 
         public override bool IsSolved()
@@ -112,7 +108,7 @@ namespace Puzzles.StarMap
         
         private Quaternion GetRotation()
         {
-            var mousePos = Camera.main!.ScreenToWorldPoint(Input.mousePosition);
+            var mousePos = _cam.ScreenToWorldPoint(Input.mousePosition);
             var objectPos = gameObject.transform.position;
             var dir = mousePos - objectPos;
             var angle = Mathf.Atan2(dir.y, dir.x) * Mathf.Rad2Deg;

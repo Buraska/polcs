@@ -1,9 +1,7 @@
-﻿
-*Музыка
+﻿С мобилкой не понятно. Стоит убрать чёлку. Можно просто зачернить края и бог с ними.
+Надо добавить настойки звука.
+написать ДЕМО
 
-*Refactor
-AudioManager Ambient
-EventManager - automatic event creation
 
 *Альфа релиз
 * Сделай сценарий на одной страничке
@@ -14,3 +12,5 @@ EventManager - automatic event creation
 
 
 * Укзать Sound effects obtained from https://www.zapsplat.com
+* Указать <a href="https://iconscout.com/lottie-animations/circle-loader" class="text-underline font-size-sm" target="_blank">Circle Loader</a> by <a href="https://iconscout.com/contributors/sheikhsohel" class="text-underline font-size-sm">Sheikh Sohel</a> on <a href="https://iconscout.com" class="text-underline font-size-sm">IconScout</a>
+
