@@ -15,6 +15,10 @@ namespace SceneSystem
         public void Awake()
         {
             foreach (var localScene in localScenes) localScene.SetActive(false);
+        }
+
+        public void Start()
+        {
             localScenes[currentSceneNumber].SetActive(true);
             GameManager.Instance.StartCoroutine(EndTransition(GameConstants.GlobalSceneTransitionTime));
         }

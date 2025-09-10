@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Linq;
+using JetBrains.Annotations;
 using UnityEngine;
 using UnityEngine.Serialization;
+using Utils;
 
 namespace DigitalRuby.SoundManagerNamespace.MySoundManager
 {
@@ -35,24 +37,31 @@ namespace DigitalRuby.SoundManagerNamespace.MySoundManager
         }
         
                 
-        public void PlayAmbient(AudioSource audioSource, AudioSource[] additionalAudioSources, float fadeSeconds = 1.0f)
+        public void PlayAmbient(AudioSource audioSource, [CanBeNull] AudioSource[] additionalAudioSources = null, float fadeSeconds = 1.0f)
         {
-            var sound = Audios.FirstOrDefault(x => x == audioSource);
-            if (sound == null)
-            {
-                Debug.LogWarning($"Sound with name '{audioSource}' not found. Adding Ambient into library");
-                Audios.Append(audioSource);
-            }
+            // var sound = Audios.FirstOrDefault(x => x == audioSource);
+            // if (sound == null)
+            // {
+            //     Debug.LogWarning($"Sound with name '{audioSource}' not found. Adding Ambient into library");
+            //     Audios.Append(audioSource);
+            // }
 
-            if (currentSource != audioSource)
+            MyUtils.Log($"AudioManager. Start event action of playing ambient {audioSource.gameObject.name}");
+            if (currentSource != audioSource || !audioSource.isPlaying)
             {
-                audioSource.PlayLoopingMusicManaged(VolumeScale, fadeSeconds, false);
+                MyUtils.Log($"AudioManager. Playing ambient {audioSource}");
+                audioSource.PlayLoopingMusicManaged(VolumeScale, fadeSeconds, false, true);
                 currentSource = audioSource;
+            }
+            else
+            {
+                MyUtils.Log($"AudioManager. Cant play. Volume - {audioSource.volume}, isPlaying - {audioSource.isPlaying}");
             }
 
             if (additionalAudioSources == null) return;
             foreach (var source in additionalAudioSources)
             {
+                if (source.isPlaying && audioSource.volume != 0) { continue; }
                 source.PlayLoopingMusicManaged(VolumeScale, fadeSeconds, false, false);
             }
         }

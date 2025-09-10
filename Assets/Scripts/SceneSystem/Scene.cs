@@ -1,7 +1,10 @@
 ﻿using System;
+using DigitalRuby.SoundManagerNamespace;
 using EventActions;
 using JetBrains.Annotations;
 using UnityEngine;
+using UnityEngine.SceneManagement;
+using Utils;
 
 public class Scene : MonoBehaviour
 {
@@ -15,18 +18,27 @@ public class Scene : MonoBehaviour
     
     private void OnEnable()
     {
+        MyUtils.Log($"Scene {gameObject.name} enabled");
+        SceneManager.sceneLoaded += OnSceneScriptLoaded;
+    }
+
+    private void OnSceneScriptLoaded(UnityEngine.SceneManagement.Scene s, UnityEngine.SceneManagement.LoadSceneMode m)
+    { 
+        PrepareScene();
+    }
+
+    private void PrepareScene()
+    {
         if (PlayAmbientEA != null)
         {
-            Debug.Log($"Start playing ambient of scene {gameObject.name}");
             GameManager.Instance.StartCoroutine(GameManager.Instance.EventManager.RunAction(PlayAmbientEA.ActionCoroutine()));
         }
-
         if (GameManager.Instance.InventoryManager != null)
         {
             GameManager.Instance.InventoryManager.SetActive(showInventory);
         }
     }
-
+    
     void FitScreen()
     {
         float worldScreenHeight = Camera.main.orthographicSize * 2f;
@@ -42,6 +54,11 @@ public class Scene : MonoBehaviour
 
     public void SetActive(bool value)
     {
+        if (value)
+        {
+            PrepareScene();
+        }
         gameObject.SetActive(value);
+        
     }
 }

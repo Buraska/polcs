@@ -9,5 +9,10 @@ namespace Utils
         {
             Debug.Log(message);
         }
+        
+        public static void LogWTF(string message)
+        {
+            Debug.Log("WTF: "+ message);
+        }
     }
 }

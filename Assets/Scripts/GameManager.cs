@@ -36,7 +36,7 @@ public class GameManager : MonoBehaviour
         UIBlocker = GetComponent<UIBlocker>();
         SceneTransitionManager = GetComponent<SceneTransitionManager>();
 
-        if (GlobalSceneManager.Instance != null) // This is done to avoid accidents, when you forgot to put back scene number to zero.
+        if (!Application.isEditor) // This is done to avoid accidents, when you forgot to put back scene number to zero.
         {
             SceneTransitionManager.SetCurrentSceneNumber(0);
         }

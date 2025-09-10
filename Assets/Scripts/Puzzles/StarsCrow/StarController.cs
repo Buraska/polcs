@@ -29,7 +29,7 @@ namespace Puzzles
         private void Update()
         {
             gameObject.transform.position =
-                Vector3.MoveTowards(gameObject.transform.position, GetCurrentPosition(), Time.deltaTime * 3);
+                Vector3.Lerp(gameObject.transform.position, GetCurrentPosition(), Time.deltaTime * 3);
 
             _sprite.enabled = !IsAfterTheRadius();
         }

@@ -14,20 +14,26 @@ namespace Utils.MenuManagement
         private const string AmbientParam = "Ambient";
         private const string SoundParam = "Sound";
 
+        private float SliderValueToDb(float volume) 
+        // Volume from 0 to 1
+        {
+            var dB = Mathf.Log10(Mathf.Max(volume, 0.0001f)) * 20f;
+            return dB;
+        }
 
         public void UpdateAmbientVolume(float volume)
         {
-            Mixer.SetFloat(AmbientParam, volume);
+            Mixer.SetFloat(AmbientParam, SliderValueToDb(volume));
         }
         
         public void UpdateMasterVolume(float volume)
         {
-            Mixer.SetFloat("Master", volume);
+            Mixer.SetFloat("Master", SliderValueToDb(volume));
         }
         
         public void UpdateSoundVolume(float volume)
         {
-            Mixer.SetFloat(SoundParam, volume);
+            Mixer.SetFloat(SoundParam, SliderValueToDb(volume));
         }
 
         public void SaveVolume()
@@ -41,8 +47,8 @@ namespace Utils.MenuManagement
 
         public void LoadVolume()
         {
-            SoundSlider.value = PlayerPrefs.GetFloat(SoundParam);
-            AmbientSlider.value = PlayerPrefs.GetFloat(AmbientParam);
+            Mixer.SetFloat(SoundParam, PlayerPrefs.GetFloat(SoundParam));
+            Mixer.SetFloat(AmbientParam, PlayerPrefs.GetFloat(AmbientParam));
         }
     }
 }

@@ -42,13 +42,19 @@ namespace DefaultNamespace
             _loaderImage.rectTransform.DORotate(new Vector3(0, 0, 360), 1f, RotateMode.FastBeyond360)
                 .SetEase(Ease.Linear)
                 .SetLoops(-1, LoopType.Restart);
-            while (scene.progress < 0.9f)
+            while (scene.progress < 0.90f)
             {
                 // You can update a progress bar here: scene.progress is [0..0.9]
                 yield return null;
             }
             _loaderImage.enabled = false;
             scene.allowSceneActivation = true;
+            
+            while (!scene.isDone)
+            {
+                yield return null;
+            }
+            
             yield return (SetActiveLoadScreenCoroutine(false));
         }
         
@@ -64,6 +70,8 @@ namespace DefaultNamespace
             {
                 _loaderScreen.enabled = value;
             }
+
+            yield return null;
         }
 
     }
