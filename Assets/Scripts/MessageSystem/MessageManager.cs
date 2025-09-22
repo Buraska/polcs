@@ -16,9 +16,11 @@ namespace MessageSystem
         [SerializeField] private Button choiceButtonPrefab;
         [SerializeField] private ChoiceHolder choiceHolder;
 
-        private Stack<DialogScript> runningScripts = new Stack<DialogScript>();
+        private readonly Stack<DialogScript> runningScripts = new Stack<DialogScript>();
         private Coroutine _chosenScript;
-        private bool isWaitingForChoice;
+        private bool _isWaitingForChoice;
+        private bool _isUiBlocked = false;
+        private bool skipMessage = false;
 
 
         private IEnumerator DisplayChoices(Choice[] choices)
@@ -38,26 +40,41 @@ namespace MessageSystem
         {
             yield return ui.ShowMessage(message, name);
             yield return new WaitUntil(() =>
-                !Input.GetKey(KeyCode.Mouse0) || !Input.GetKey(KeyCode.Space) || !Input.GetKey(KeyCode.RightArrow));
+                (skipMessage || !Input.GetKey(KeyCode.Mouse0) || !Input.GetKey(KeyCode.Space) || !Input.GetKey(KeyCode.RightArrow)) && !_isUiBlocked);
             yield return new WaitUntil(() =>
-                Input.GetKeyDown(KeyCode.Mouse0) || Input.GetKeyDown(KeyCode.Space) ||
+                skipMessage || Input.GetKeyDown(KeyCode.Mouse0) || Input.GetKeyDown(KeyCode.Space) ||
                 Input.GetKeyDown(KeyCode.RightArrow));
+            skipMessage = false;
             Debug.Log($"Stops DisplayMessage({message})");
             yield return ui.HideMessage();
+        }
+
+        public void NextMessage()
+        {
+            if (ui.IsShowingMessage())
+            {
+                skipMessage = true;
+            }
+        }
+
+        public void BlockMessageSystem(bool value)
+        {
+            _isUiBlocked = value;
         }
 
 
         public IEnumerator DisplayScript(DialogScript script, [CanBeNull] OmgTalkingSprite[] sprites = null)
         {
-            MyUtils.Log($"Start Displaying script: {script.scriptUnit[0].Message}...");
             runningScripts.Push(script);
-
             try
             {
                 foreach (var unit in script.scriptUnit)
                 {
                     yield return HandleScriptUnit(unit, sprites);
-                    yield return new WaitUntil(() => runningScripts.Peek() == script);
+                    while (runningScripts.Peek() != script)
+                    {
+                        yield return null;
+                    }
                 }
             }
             finally
@@ -66,7 +83,6 @@ namespace MessageSystem
                     Debug.LogError("DisplayScript Error. The deleted dialogScript is not the same that was started.");
         
                 ui.HidePanel();
-                MyUtils.Log($"Stop Displaying script: {script.scriptUnit[0].Message}...");
             }
         }
         public IEnumerator DisplayScript(SayMessageNameObj[] scriptObjects, OmgTalkingSprite[] sprites = null)
@@ -106,7 +122,13 @@ namespace MessageSystem
         {
             Debug.Log($"Displaying {scriptUnit.Message}");
             if (!string.IsNullOrWhiteSpace(scriptUnit.eventTriggerId))
-                GameManager.Instance.EventManager.InvokeFromStorage(scriptUnit.eventTriggerId);
+            {
+                var e = GameManager.Instance.StartCoroutine(GameManager.Instance.EventManager.InvokeFromStorage(scriptUnit.eventTriggerId));
+                if (GameManager.Instance.EventManager.DoesEventNeedToWait(scriptUnit.eventTriggerId))
+                {
+                    yield return e;
+                }
+            }
 
             if (scriptUnit.choices is { Length: > 0 })
             {

@@ -8,14 +8,16 @@ namespace EventActions
     public class PlayAmbient : EventAction
     {
 
-        [FormerlySerializedAs("audioName")] public AudioSource audioSource;
+        [FormerlySerializedAs("audioName")] [CanBeNull]
+        public AudioSource audioSource;
         public AudioSource[] additionalAudioSources; 
         public float fadeSeconds = 1.0f;
+        public bool additive = false;
         [CanBeNull] public Scene sceneToRewriteAmbient;
 
         public override IEnumerator ActionCoroutine()
         {
-            GameManager.Instance.AudioManager.PlayAmbient(audioSource, additionalAudioSources, fadeSeconds);
+            GameManager.Instance.AudioManager.PlayAmbient(audioSource, additionalAudioSources, fadeSeconds, additive);
             if (sceneToRewriteAmbient != null)
             {
                 sceneToRewriteAmbient.PlayAmbientEA = this;

@@ -18,20 +18,21 @@ namespace Anime
         private float _current_weight;
 
 
-        public IEnumerator IncreaseVolumeTween(float additionalValue, float duration = 1f, bool mute = false)
+        public IEnumerator IncreaseVolumeTween(float additionalValue, float duration = 1f, bool mute = false,
+            bool completePreviousTween = true)
         {
 
 
             var target = Mathf.Clamp01(MadnessVolume.weight + additionalValue);
 
-            DOTween.Kill(MadnessVolume, true);
+            DOTween.Kill(gameObject, completePreviousTween);
 
             var visualTween = DOTween.To(() => MadnessVolume.weight,
                     x => MadnessVolume.weight = x,
                     target,
                     duration)
                 .SetEase(madnessCurve)
-                .SetTarget(MadnessVolume);
+                .SetTarget(gameObject);
 
             if (!mute && MadnessAudio != null)
             {
@@ -47,7 +48,7 @@ namespace Anime
                         audioTarget,
                         duration)
                     .SetEase(madnessCurve)
-                    .SetTarget(MadnessVolume);    
+                    .SetTarget(gameObject);    
             }
             yield return visualTween.WaitForCompletion();
         }

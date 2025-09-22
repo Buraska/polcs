@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections;
 using DefaultNamespace;
+using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -60,15 +61,23 @@ namespace SceneSystem
             obj.SetActive(true);
             var spriteRenderer = obj.transform.GetComponent<SpriteRenderer>();
             var image = obj.transform.GetComponent<Image>();
+            var text = obj.transform.GetComponent<TextMeshProUGUI>();
 
             if (spriteRenderer != null)
             {
                 yield return CustomAnimation.FadeImage(spriteRenderer, false, fadeDuration);
             }
-            else
+
+            if (text != null)
+            {
+                yield return CustomAnimation.FadeImage(text, false, fadeDuration);
+
+            }
+            if (image != null)
             {
                 yield return CustomAnimation.FadeImage(image, false, fadeDuration);
-            }        }
+            }        
+        }
 
 
         public IEnumerator TransitionToSceneCoroutine(int sceneNum, float duration = 1)

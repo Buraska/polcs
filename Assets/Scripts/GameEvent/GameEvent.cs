@@ -12,10 +12,11 @@ namespace GameEvent
         [SerializeField] public GameEvent[] forbiddenEvents;
 
         [SerializeField] public EventAction[] actions;
+        
 
         public string EventName => name;
 
-        public EventAction[] GetActions()
+        public virtual EventAction[] GetActions()
         {
             return actions;
         }

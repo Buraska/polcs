@@ -27,6 +27,11 @@ public static class CustomAnimation
 
         Tween t = img.DOFade(targetAlpha, duration)
             .SetEase(Ease.Linear);
+        
+        t.onKill = () => { 
+            col.a = targetAlpha;
+            img.color = col;
+        };
 
         yield return t.WaitForCompletion();
     }
@@ -51,9 +56,42 @@ public static class CustomAnimation
 
         Tween t = img.DOFade(targetAlpha, duration)
             .SetEase(Ease.Linear);
+        t.onKill = () => { 
+            col.a = targetAlpha;
+            img.color = col;
+        };
 
         yield return t.WaitForCompletion();
     }
+    
+    public static IEnumerator  FadeImage(TextMeshProUGUI img, bool fadeIn, float duration = 0.125f)
+    {
+        if (!img) yield break;
+
+        Color col = img.color;
+        if (duration == 0)
+        {
+            col.a = fadeIn ? 0f : 1f;
+            img.color = col;
+            yield break;
+        }
+        
+        var targetAlpha = fadeIn ? 0f : 1f;
+        var startAlpha = !fadeIn ? 0f : 1f;
+        img.DOKill();
+        col.a = startAlpha;
+        img.color = col;
+
+        Tween t = img.DOFade(targetAlpha, duration)
+            .SetEase(Ease.Linear);
+        t.onKill = () => { 
+            col.a = targetAlpha;
+            img.color = col;
+        };
+
+        yield return t.WaitForCompletion();
+    }
+
 
 
     public static IEnumerator Blinking(SpriteRenderer sprite, float fadeSpeed = 1f, float minTarget = 0.5f)

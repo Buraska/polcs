@@ -12,6 +12,7 @@ namespace Utils.MenuManagement
         [SerializeField] private Slider AmbientSlider;
 
         private const string AmbientParam = "Ambient";
+        private const string MusicParam = "Music";
         private const string SoundParam = "Sound";
 
         private float SliderValueToDb(float volume) 
@@ -24,6 +25,7 @@ namespace Utils.MenuManagement
         public void UpdateAmbientVolume(float volume)
         {
             Mixer.SetFloat(AmbientParam, SliderValueToDb(volume));
+            Mixer.SetFloat(MusicParam, SliderValueToDb(volume));
         }
         
         public void UpdateMasterVolume(float volume)

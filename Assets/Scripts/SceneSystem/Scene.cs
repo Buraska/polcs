@@ -10,6 +10,7 @@ public class Scene : MonoBehaviour
 {
     public bool showInventory;
     [CanBeNull] public PlayAmbient PlayAmbientEA;
+    [CanBeNull] public PlayMusic PlayMusicEA;
     
     void Start()
     {
@@ -32,6 +33,10 @@ public class Scene : MonoBehaviour
         if (PlayAmbientEA != null)
         {
             GameManager.Instance.StartCoroutine(GameManager.Instance.EventManager.RunAction(PlayAmbientEA.ActionCoroutine()));
+        }
+        if (PlayMusicEA != null)
+        {
+            GameManager.Instance.StartCoroutine(GameManager.Instance.EventManager.RunAction(PlayMusicEA.ActionCoroutine()));
         }
         if (GameManager.Instance.InventoryManager != null)
         {

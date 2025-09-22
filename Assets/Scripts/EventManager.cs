@@ -3,21 +3,41 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
+using Utils;
 
 public class EventManager : MonoBehaviour
 {
     [SerializeField] private EventEntry[] _eventStorage;
+    [SerializeField] private List<EventEntry> _eventList;
 
     private readonly List<GameEvent.GameEvent> _events = new();
     private readonly List<Coroutine> _runningCoroutines = new();
 
-    public void InvokeFromStorage(string id)
+    private void Start()
     {
-        var gEvent = _eventStorage.FirstOrDefault(x => x.id == id)?.gameEvent;
+        var events = GetComponentsInChildren<GameEvent.GameEvent>();
+        foreach (var e in events)
+        {
+            var eventEntity = new EventEntry();
+            eventEntity.gameEvent = e;
+            eventEntity.id = MyUtils.CamelToSnake(e.EventName);
+            _eventList.Add(eventEntity);
+        }
+    }
+    
+
+
+    public IEnumerator InvokeFromStorage(string id)
+    {
+        var gEvent = _eventList.FirstOrDefault(x => x.id == id)?.gameEvent;
         if (gEvent != null)
         {
             Debug.Log(id);
-            StartCoroutine(RunEvent(gEvent));
+            var eCoroutine = StartCoroutine(RunEvent(gEvent));
+            if (DoesEventNeedToWait(id))
+            {
+                yield return eCoroutine;
+            }
         }
         else
         {
@@ -43,7 +63,7 @@ public class EventManager : MonoBehaviour
 
     public bool isEventRunning()
     {
-        if (_runningCoroutines.Count != 0) Debug.Log($"Cannot run Event. Event count is {_runningCoroutines.Count}");
+        if (_runningCoroutines.Count != 0) MyUtils.Log($"Cannot run Event. Event count is {_runningCoroutines.Count}");
         return _runningCoroutines.Count != 0;
     }
 
@@ -132,5 +152,10 @@ public class EventManager : MonoBehaviour
     {
         public string id;
         public GameEvent.GameEvent gameEvent;
+    }
+
+    public bool DoesEventNeedToWait(string eventId)
+    {
+        return eventId.EndsWith("_wait");
     }
 }
