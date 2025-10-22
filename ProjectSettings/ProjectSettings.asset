@@ -12,10 +12,10 @@ PlayerSettings:
   targetDevice: 2
   useOnDemandResources: 0
   accelerometerFrequency: 60
-  companyName: Dark Poetry
+  companyName: Burashka Tales
   productName: Blessing of The Nameless
-  defaultCursor: {fileID: 2800000, guid: eaad144c48f45954ca910d90e6a06155, type: 3}
-  cursorHotspot: {x: 0, y: 0}
+  defaultCursor: {fileID: 2800000, guid: 7f299f44d10e78f42a59e62074a375b5, type: 3}
+  cursorHotspot: {x: 200, y: 200}
   m_SplashScreenBackgroundColor: {r: 0.13725491, g: 0.12156863, b: 0.1254902, a: 1}
   m_ShowUnitySplashScreen: 1
   m_ShowUnitySplashLogo: 1
@@ -44,8 +44,8 @@ PlayerSettings:
   m_HolographicTrackingLossScreen: {fileID: 0}
   defaultScreenWidth: 1920
   defaultScreenHeight: 1080
-  defaultScreenWidthWeb: 990
-  defaultScreenHeightWeb: 510
+  defaultScreenWidthWeb: 960
+  defaultScreenHeightWeb: 540
   m_StereoRenderingPath: 0
   m_ActiveColorSpace: 0
   unsupportedMSAAFallback: 0

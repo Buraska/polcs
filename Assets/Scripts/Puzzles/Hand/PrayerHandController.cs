@@ -32,7 +32,6 @@ namespace Puzzles.Hand
 
             if (Input.GetMouseButtonDown(0)) // ЛКМ нажата
             {
-                Debug.Log("HERE!");
                 startMousePos = GetMouseWorldPosition();
                 isDrawing = true;
                 _currentLinePrefab = Instantiate(prefabWithLine);
@@ -57,7 +56,7 @@ namespace Puzzles.Hand
                 _currentLine.SetPosition(1, currentMousePos);
             }
 
-            if (isDrawing && Input.GetMouseButtonUp(0)) // ЛКМ отпущена
+            if (isDrawing && !Input.GetMouseButton(0)) // ЛКМ отпущена
             {
                 isDrawing = false;
                 if (Vector3.Distance(_currentLine.GetPosition(0), _currentLine.GetPosition(1)) < 1f)

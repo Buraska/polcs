@@ -1,4 +1,5 @@
 ﻿using System;
+using DefaultNamespace;
 using DigitalRuby.SoundManagerNamespace;
 using EventActions;
 using JetBrains.Annotations;
@@ -9,6 +10,7 @@ using Utils;
 public class Scene : MonoBehaviour
 {
     public bool showInventory;
+    public bool showCursor = true;
     [CanBeNull] public PlayAmbient PlayAmbientEA;
     [CanBeNull] public PlayMusic PlayMusicEA;
     
@@ -30,6 +32,7 @@ public class Scene : MonoBehaviour
 
     private void PrepareScene()
     {
+        MouseManager.Instance.SetCursorVisible(showCursor);
         if (PlayAmbientEA != null)
         {
             GameManager.Instance.StartCoroutine(GameManager.Instance.EventManager.RunAction(PlayAmbientEA.ActionCoroutine()));

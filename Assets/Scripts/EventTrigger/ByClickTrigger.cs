@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using System;
+using UnityEngine;
 using UnityEngine.EventSystems;
 
 namespace EventTrigger
@@ -10,6 +11,11 @@ namespace EventTrigger
             Debug.Log("OnPointerClick");
             if (GameManager.Instance.GameStateManager.GameState != GameState.Exploring) return;
             GameManager.Instance.StartCoroutine(GameManager.Instance.EventManager.RunEvents(gameEvents));
+        }
+
+        private void OnMouseEnter()
+        {
+            Debug.Log("Happens");
         }
     }
 }

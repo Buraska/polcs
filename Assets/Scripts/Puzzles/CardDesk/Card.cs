@@ -9,6 +9,7 @@ namespace Puzzles.CardDesk
     {
         [NonSerialized] public bool IsClicked;
         [NonSerialized] public bool isTurned;
+        public int cardOrder { get; private set;}= -1;
 
         [NonSerialized] public SpriteRenderer SpriteRenderer;
 
@@ -23,8 +24,9 @@ namespace Puzzles.CardDesk
             IsClicked = true;
         }
 
-        public IEnumerator openCard(Sprite faceSprite)
+        public IEnumerator openCard(Sprite faceSprite, int order)
         {
+            cardOrder = order;
             isTurned = true;
             yield return CustomAnimation.RotateOverTime(transform, 90, 0.25f);
             SpriteRenderer.sprite = faceSprite;

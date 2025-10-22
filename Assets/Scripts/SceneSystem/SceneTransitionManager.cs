@@ -4,6 +4,7 @@ using DefaultNamespace;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
+using Utils;
 
 namespace SceneSystem
 {
@@ -32,6 +33,11 @@ namespace SceneSystem
             }
 
             Debug.LogError($"Cannot set scene with number {sceneNum}. The index does not exist.");
+        }
+
+        public void GetScene()
+        {
+            MyUtils.LogWTF($"{localScenes.Length}");
         }
 
         public IEnumerator DisableObjectCoroutine(GameObject obj, float fadeDuration = 1)

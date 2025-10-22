@@ -1,11 +1,11 @@
-﻿using System;
-using System.Collections;
+﻿using System.Collections;
 using DG.Tweening;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
+using Utils;
 
-namespace DefaultNamespace
+namespace SceneSystem
 {
     public class GlobalSceneManager : MonoBehaviour
     {
@@ -46,7 +46,7 @@ namespace DefaultNamespace
             {
                 // You can update a progress bar here: scene.progress is [0..0.9]
                 yield return null;
-            }
+            } 
             _loaderImage.enabled = false;
             scene.allowSceneActivation = true;
             
@@ -54,6 +54,7 @@ namespace DefaultNamespace
             {
                 yield return null;
             }
+            GameManager.Instance.SceneTransitionManager.GetScene();
             
             yield return (SetActiveLoadScreenCoroutine(false));
         }

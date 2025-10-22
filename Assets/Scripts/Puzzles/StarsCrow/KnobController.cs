@@ -15,7 +15,8 @@ public class KnobController : BasePuzzleElement, IPointerDownHandler
     private Quaternion _newPos;
     private Quaternion _previousLocation;
     private Transform _tr;
-    private Camera _cam;
+    private Camera _cam; 
+    [SerializeField] private AudioSource _touchSound;
 
 
     [NonSerialized] public float CurrentValue;
@@ -37,6 +38,7 @@ public class KnobController : BasePuzzleElement, IPointerDownHandler
 
     public void OnPointerDown(PointerEventData eventData)
     {
+        _touchSound.Play();
         var newPosition = GetRotation();
         _difference = newPosition * Quaternion.Inverse(_previousLocation);
         GameManager.Instance.StartCoroutine(GetPositionCoroutine());

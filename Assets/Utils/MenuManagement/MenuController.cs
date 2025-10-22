@@ -2,6 +2,7 @@
 using System.Collections;
 using DefaultNamespace;
 using JetBrains.Annotations;
+using SceneSystem;
 using UnityEngine;
 using UnityEngine.Audio;
 using UnityEngine.SceneManagement;
@@ -13,7 +14,7 @@ namespace Utils.MenuManagement
     public class MenuController : MonoBehaviour
     {
         
-        private const string SUPPORT_PAGE = "https://www.kickstarter.com/discover/advanced?term=novel%20visual";
+        private const string SUPPORT_PAGE = "https://burashka-tales.itch.io/blessing-of-the-nameless";
             
         public Image SceneBlocker;
         

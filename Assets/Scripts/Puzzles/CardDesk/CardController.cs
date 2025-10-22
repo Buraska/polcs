@@ -6,34 +6,39 @@ namespace Puzzles.CardDesk
 {
     public class CardController : MonoBehaviour
     {
-        [SerializeField] private CardAndEvent[] _cards;
+        [SerializeField] private CardAndEvent[] _cardsEvents;
+        private Card[] _cards;
         private int cardsTurned;
 
         public AudioSource cardSound;
 
+        private void Awake()
+        {
+            _cards = GetComponentsInChildren<Card>();
+        }
+
         private void Update()
         {
             foreach (var card in _cards)
-                if (card.Card.IsClicked && !card.Card.isTurned)
-                    StartCoroutine(_openCard(card.Card));
-        }
-
-        private IEnumerator _openCard(Card card)
-        { 
-            cardSound.Play();
-            card.isTurned = true;
-            yield return GameManager.Instance.EventManager.RunAction(card.openCard(_cards[cardsTurned].CardFace));
-            
-            GameManager.Instance.StartCoroutine(
-                GameManager.Instance.EventManager.RunEvents(new[] { _cards[cardsTurned].GameEvent }));
-            cardsTurned++;
+                if (card.IsClicked)
+                {
+                    if (!card.isTurned)
+                    {
+                        var cardEvent = _cardsEvents[cardsTurned];
+                        cardSound.Play();
+                        StartCoroutine(card.openCard(cardEvent.CardFace, cardsTurned));
+                        cardsTurned++;
+                    }
+                    GameManager.Instance.StartCoroutine(
+                        GameManager.Instance.EventManager.RunEvents(new[] { _cardsEvents[card.cardOrder].GameEvent}));
+                    card.IsClicked = false;
+                }
         }
     }
 
     [Serializable]
     public class CardAndEvent
     {
-        public Card Card;
         public Sprite CardFace;
         public GameEvent.GameEvent GameEvent;
     }
