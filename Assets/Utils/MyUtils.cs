@@ -1,4 +1,6 @@
-﻿using System.Text.RegularExpressions;
+﻿using System;
+using System.Text;
+using System.Text.RegularExpressions;
 using JetBrains.Annotations;
 using UnityEngine;
 
@@ -19,6 +21,39 @@ namespace Utils
                 message = "null";
             }
             Debug.Log("WTF: "+ message);
+        }
+        
+        public static string BoolArrayToString(bool[,] array)
+        {
+            int rows = array.GetLength(0);
+            int cols = array.GetLength(1);
+            StringBuilder sb = new StringBuilder();
+
+            sb.Append(rows).Append(",").Append(cols).Append(";");
+            for (int i = 0; i < rows; i++)
+            {
+                for (int j = 0; j < cols; j++)
+                    sb.Append(array[i, j] ? '1' : '0');
+                sb.Append('|');
+            }
+            return sb.ToString();
+        }
+
+        // Convert string back to bool[,]
+        public static bool[,] StringToBoolArray(string data)
+        {
+            string[] parts = data.Split(';');
+            string[] dims = parts[0].Split(',');
+            int rows = int.Parse(dims[0]);
+            int cols = int.Parse(dims[1]);
+            bool[,] result = new bool[rows, cols];
+            string[] rowStrings = parts[1].Split('|', StringSplitOptions.RemoveEmptyEntries);
+
+            for (int i = 0; i < rows; i++)
+            for (int j = 0; j < cols; j++)
+                result[i, j] = rowStrings[i][j] == '1';
+
+            return result;
         }
         
          public static string CamelToSnake(string s)

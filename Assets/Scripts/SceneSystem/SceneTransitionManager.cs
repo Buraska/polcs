@@ -55,6 +55,22 @@ namespace SceneSystem
             }
             obj.SetActive(false);
         }
+        
+        public IEnumerator EnableObjectIterativeCoroutine(GameObject obj, float fadeDuration = 1)
+        {
+            var tasks = new ArrayList();
+            obj.SetActive(true);
+            var spriteRenderers = obj.transform.GetComponentsInChildren<SpriteRenderer>();
+
+            foreach (var sprite in spriteRenderers)
+            {
+                tasks.Add(GameManager.Instance.StartCoroutine(CustomAnimation.FadeImage(sprite, false, fadeDuration)));
+            }
+            foreach (var task in tasks)
+            {
+                yield return tasks;
+            }
+        }
 
         public IEnumerator DisableSpriteCoroutine(SpriteRenderer obj, float fadeDuration = 1)
         {

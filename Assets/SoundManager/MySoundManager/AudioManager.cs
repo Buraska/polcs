@@ -87,8 +87,7 @@ namespace DigitalRuby.SoundManagerNamespace.MySoundManager
                 currentAmbient = null;
             }
 
-            MyUtils.Log($"AudioManager. Start event action of playing ambient {audioSource.gameObject.name}");
-            if (currentAmbient != audioSource || !audioSource.isPlaying)
+            else if (currentAmbient != audioSource || !audioSource.isPlaying)
             {
                 MyUtils.Log($"AudioManager. Playing ambient {audioSource}");
                 audioSource.PlayLoopingMusicManaged(VolumeScale, fadeSeconds, false, !additive);
